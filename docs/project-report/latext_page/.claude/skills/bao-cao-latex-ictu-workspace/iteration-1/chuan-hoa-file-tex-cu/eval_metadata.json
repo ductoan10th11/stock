@@ -1,0 +1,14 @@
+{
+  "eval_name": "chuan-hoa-file-tex-cu",
+  "prompt": "chuẩn hóa file bao_cao.tex này giúp mình cho chuyên nghiệp, đủ thành phần của 1 báo cáo môn học sinh viên (bìa, cam đoan, mục lục...), giữ lại nội dung và trích dẫn cũ. nhớ biên dịch ra pdf\nInput files: bao_cao.tex, images/",
+  "assertions": [
+    "File .tex chuẩn hóa biên dịch bằng XeLaTeX ra PDF không có lỗi",
+    "Có trang bìa ghi tên trường và loại báo cáo",
+    "Có đủ Lời cam đoan, Lời cảm ơn, Mục lục, Danh mục hình, Danh mục bảng",
+    "Giữ đủ 6 tài liệu tham khảo cũ (alquraishi2021, lananh, tuananh2024, hai2017, thuan2022, thuy2023) và tất cả đều được trích dẫn",
+    "Giữ các đoạn nội dung cũ, gồm câu về Random Forest là mô hình tối ưu và kết quả Precision 43,70%",
+    "Giữ cả 3 hình cũ (image1, image2, image3)",
+    "Các trang trước phần nội dung đánh số La Mã, phần nội dung đánh số Ả Rập",
+    "Bookmark PDF có số thứ tự chương và mục"
+  ]
+}

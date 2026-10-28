@@ -1,0 +1,59 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {chapter}{LỜI CAM ĐOAN}{ii}{section*.3}%
+\contentsline {chapter}{LỜI CẢM ƠN}{iii}{section*.5}%
+\contentsline {chapter}{BẢNG PHÂN CÔNG NHIỆM VỤ}{iv}{section*.7}%
+\contentsline {chapter}{DANH MỤC HÌNH ẢNH}{viii}{chapter*.9}%
+\contentsline {chapter}{DANH MỤC BẢNG}{ix}{chapter*.10}%
+\contentsline {chapter}{DANH MỤC TỪ VIẾT TẮT}{x}{section*.12}%
+\contentsline {chapter}{MỞ ĐẦU}{1}{section*.14}%
+\contentsline {chapter}{\numberline {1}Tổng quan về học máy và bài toán dự đoán xu hướng giá cổ phiếu}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Giới thiệu bài toán}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Các công trình nghiên cứu liên quan}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Đặc điểm chuỗi giá cổ phiếu và các chỉ báo kỹ thuật}{4}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Đặc điểm chuỗi giá cổ phiếu}{4}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Các chỉ báo kỹ thuật}{5}{subsection.1.3.2}%
+\contentsline {section}{\numberline {1.4}Cơ sở lý thuyết các thuật toán sử dụng}{6}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Thuật toán 1: Hồi quy Logistic}{6}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Thuật toán 2: Rừng ngẫu nhiên}{6}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Thuật toán 3: XGBoost}{6}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}Các chỉ số đánh giá mô hình}{7}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Kết luận chương 1}{7}{section.1.6}%
+\contentsline {chapter}{\numberline {2}Mô hình hóa bài toán và phương pháp dự đoán xu hướng giá cổ phiếu}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Phát biểu bài toán học máy}{9}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Mục tiêu và tiêu chí thành công}{9}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Lựa chọn thuật toán và mô hình cơ sở}{10}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Lựa chọn thuật toán}{10}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Mô hình cơ sở}{11}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Quy trình huấn luyện}{11}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Phương pháp và chỉ số đánh giá}{12}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Kết luận chương 2}{13}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Thực nghiệm và đánh giá}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Dữ liệu thực nghiệm}{14}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Nguồn dữ liệu}{14}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Từ điển dữ liệu thô}{15}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Khảo sát và phân tích dữ liệu}{15}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Thống kê và phân bố dữ liệu}{15}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Quan hệ giữa các đặc trưng}{16}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Phát hiện và xử lý vấn đề chất lượng dữ liệu}{16}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Chuẩn bị dữ liệu cho mô hình}{17}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Môi trường thực nghiệm}{18}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Kết quả huấn luyện và đánh giá}{18}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Phân tích kết quả dự đoán}{19}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Tối ưu hóa và cải tiến mô hình}{19}{section.3.8}%
+\contentsline {subsection}{\numberline {3.8.1}Phân tích hạn chế của mô hình ban đầu}{19}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.2}Cải tiến dữ liệu và đặc trưng}{19}{subsection.3.8.2}%
+\contentsline {subsection}{\numberline {3.8.3}Thử nghiệm thuật toán hoặc cấu hình khác}{20}{subsection.3.8.3}%
+\contentsline {subsection}{\numberline {3.8.4}Tối ưu hóa siêu tham số}{20}{subsection.3.8.4}%
+\contentsline {section}{\numberline {3.9}So sánh trước và sau cải tiến}{20}{section.3.9}%
+\contentsline {section}{\numberline {3.10}Khả năng tổng quát hóa và lựa chọn mô hình cuối}{21}{section.3.10}%
+\contentsline {subsection}{\numberline {3.10.1}Khả năng tổng quát hóa}{21}{subsection.3.10.1}%
+\contentsline {subsection}{\numberline {3.10.2}Lựa chọn mô hình cuối cùng}{21}{subsection.3.10.2}%
+\contentsline {section}{\numberline {3.11}Kết luận chương 3}{21}{section.3.11}%
+\contentsline {chapter}{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}{22}{section*.30}%
+\contentsline {chapter}{TÀI LIỆU THAM KHẢO}{23}{chapter*.31}%
+\renewcommand {\tocchapname }{Phụ lục}
+\contentsline {chapter}{\numberline {A}Hướng dẫn cài đặt và chạy chương trình}{25}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Yêu cầu môi trường}{25}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Các bước thực hiện}{25}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Nhật ký đóng góp của các thành viên}{26}{appendix.B}%
+\contentsfinish 

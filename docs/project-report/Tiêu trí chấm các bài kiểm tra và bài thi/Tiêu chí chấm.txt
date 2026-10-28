@@ -1,0 +1,254 @@
+﻿BỘ TIÊU CHÍ ĐÁNH GIÁ DỰ ÁN HỌC MÁY
+Học phần: Học máy – Học kỳ 1, năm học 2026–2027
+
+====================================================================================================
+I. BÀI KIỂM TRA 1 – TUẦN 4: XÁC ĐỊNH BÀI TOÁN, KHẢO SÁT VÀ TIỀN XỬ LÝ DỮ LIỆU
+====================================================================================================
+
+1. [N] Phát biểu bài toán học máy (1,0 điểm)
+   Yêu cầu cần đạt: Xác định đúng loại bài toán (hồi quy, phân loại, phân cụm, gợi ý, phát hiện bất thường…), đơn vị mẫu, đầu vào (đặc trưng) và đầu ra (nhãn/giá trị dự đoán)
+   Minh chứng đánh giá: Mục "Phát biểu bài toán" trong báo cáo
+
+2. [N] Mục tiêu và tiêu chí thành công (1,0 điểm)
+   Yêu cầu cần đạt: Chuyển mục tiêu thực tế thành mục tiêu học máy; nêu chỉ số chính và mức kết quả mong muốn hoặc mức tham chiếu
+   Minh chứng đánh giá: Báo cáo; bảng mục tiêu – chỉ số
+
+3. [N] Nguồn và mô tả dữ liệu (1,0 điểm)
+   Yêu cầu cần đạt: Nêu rõ nguồn, điều kiện sử dụng, số mẫu, số đặc trưng, kiểu dữ liệu; có từ điển dữ liệu mô tả ý nghĩa từng đặc trưng
+   Minh chứng đánh giá: Bộ dữ liệu, từ điển dữ liệu, đường dẫn nguồn
+
+4. [N] Khảo sát thống kê và phân bố dữ liệu (1,0 điểm)
+   Yêu cầu cần đạt: Có thống kê mô tả; biểu đồ phân bố các đặc trưng chính và phân bố nhãn; có nhận xét cho mỗi biểu đồ
+   Minh chứng đánh giá: Notebook EDA, hình vẽ trong báo cáo
+
+5. [N] Phân tích quan hệ giữa các đặc trưng và với đầu ra (1,0 điểm)
+   Yêu cầu cần đạt: Phân tích tương quan/quan hệ đặc trưng – nhãn; rút ra ít nhất 3 nhận xét có ý nghĩa cho việc xây dựng mô hình
+   Minh chứng đánh giá: Notebook EDA, mục nhận xét
+
+6. [N] Phát hiện vấn đề chất lượng dữ liệu (1,0 điểm)
+   Yêu cầu cần đạt: Định lượng được giá trị thiếu, bản ghi trùng, ngoại lai, sai định dạng, mất cân bằng lớp và nguy cơ rò rỉ dữ liệu (nếu có)
+   Minh chứng đánh giá: Bảng thống kê vấn đề dữ liệu
+
+7. [N] Xử lý vấn đề chất lượng dữ liệu (1,0 điểm)
+   Yêu cầu cần đạt: Chọn phương pháp xử lý phù hợp cho từng vấn đề, có lý do; so sánh dữ liệu trước – sau xử lý
+   Minh chứng đánh giá: Mã nguồn tiền xử lý, bảng/biểu đồ trước – sau
+
+8. [N] Chuẩn bị dữ liệu cho mô hình (1,0 điểm)
+   Yêu cầu cần đạt: Mã hóa biến phân loại, chuẩn hóa/biến đổi đặc trưng phù hợp; chia tập huấn luyện/kiểm tra đúng đặc thù dữ liệu (phân tầng, theo thời gian hoặc theo nhóm); các phép biến đổi chỉ khớp (fit) trên tập huấn luyện
+   Minh chứng đánh giá: Mã nguồn, kích thước các tập dữ liệu
+
+9. [CN] Lựa chọn và lý giải phương pháp, chỉ số đánh giá (1,0 điểm)
+   Yêu cầu cần đạt: Sinh viên tự giải thích được vì sao chọn chiến lược đánh giá (hold-out, K-Fold, TimeSeriesSplit…) và chỉ số đánh giá (Accuracy, F1, ROC-AUC, RMSE, Silhouette…) phù hợp với bài toán và dữ liệu của nhóm
+   Minh chứng đánh giá: Báo cáo + vấn đáp cá nhân
+
+10. [CN] Vấn đáp và thực hành cá nhân về dữ liệu (1,0 điểm)
+   Yêu cầu cần đạt: Giải thích được ý nghĩa dữ liệu và các quyết định tiền xử lý; thực hiện tại chỗ một thao tác do giảng viên yêu cầu (ví dụ: thống kê lại một đặc trưng, vẽ một biểu đồ, đổi phương pháp điền khuyết)
+   Minh chứng đánh giá: Vấn đáp, thao tác trực tiếp trên notebook
+
+Tổng điểm: 10,0
+
+Hướng dẫn chấm và lưu ý – Bài kiểm tra 1:
+- Tiêu chí 1–2: chỉ cho 1,0 khi đầu vào/đầu ra được phát biểu cụ thể với dữ liệu của nhóm, không chép mô tả chung của đề tài.
+- Tiêu chí 4–5: biểu đồ không có nhận xét hoặc nhận xét chung chung ("dữ liệu phân bố đều") tối đa 0,5.
+- Tiêu chí 6–7: phát hiện vấn đề nhưng không định lượng, hoặc xử lý mà không nêu lý do, tối đa 0,5.
+- Tiêu chí 8: nếu chuẩn hóa/điền khuyết/oversampling trên toàn bộ dữ liệu trước khi chia (gây rò rỉ dữ liệu) thì tối đa 0,5 và yêu cầu sửa ở giai đoạn 2.
+- Chưa yêu cầu huấn luyện mô hình ở mốc này; không trừ điểm nếu nhóm chưa có mô hình.
+
+
+====================================================================================================
+II. BÀI KIỂM TRA 2 – TUẦN 6: XÂY DỰNG, HUẤN LUYỆN VÀ ĐÁNH GIÁ MÔ HÌNH
+====================================================================================================
+
+1. [N] Lựa chọn thuật toán phù hợp (1,0 điểm)
+   Yêu cầu cần đạt: Chọn ít nhất 2 thuật toán phù hợp với loại bài toán và đặc điểm dữ liệu (kích thước, kiểu đặc trưng, mất cân bằng…), có lý do lựa chọn
+   Minh chứng đánh giá: Mục "Lựa chọn thuật toán" trong báo cáo
+
+2. [N] Mô hình cơ sở (baseline) (1,0 điểm)
+   Yêu cầu cần đạt: Có mô hình cơ sở đơn giản để so sánh (dự đoán theo lớp đa số/giá trị trung bình, mô hình tuyến tính đơn giản…) và kết quả của mô hình này
+   Minh chứng đánh giá: Mã nguồn, bảng kết quả
+
+3. [N] Quy trình huấn luyện (1,0 điểm)
+   Yêu cầu cần đạt: Tiền xử lý và mô hình được tổ chức thành quy trình thống nhất (Pipeline/ColumnTransformer hoặc tương đương), không rò rỉ dữ liệu, cố định random_state
+   Minh chứng đánh giá: Mã nguồn quy trình
+
+4. [N] Cài đặt mô hình bằng Python (1,0 điểm)
+   Yêu cầu cần đạt: Mã nguồn chạy được từ đầu đến cuối, cấu trúc rõ ràng, có chú thích; sử dụng đúng thư viện (NumPy, Pandas, Scikit-learn…)
+   Minh chứng đánh giá: Notebook/mã nguồn, chạy thử
+
+5. [N] Huấn luyện và kiểm thử đúng phương pháp (1,0 điểm)
+   Yêu cầu cần đạt: Huấn luyện và đánh giá bằng kiểm định chéo trên tập huấn luyện; tập kiểm tra chỉ dùng để đánh giá cuối; báo cáo giá trị trung bình và độ lệch chuẩn
+   Minh chứng đánh giá: Mã nguồn, kết quả kiểm định chéo
+
+6. [N] Đánh giá bằng chỉ số phù hợp (1,0 điểm)
+   Yêu cầu cần đạt: Đánh giá đúng các chỉ số đã chọn ở Bài kiểm tra 1; có bảng so sánh các mô hình với mô hình cơ sở; có công cụ đánh giá bổ trợ (ma trận nhầm lẫn, biểu đồ phần dư, đường ROC…)
+   Minh chứng đánh giá: Bảng kết quả, hình vẽ
+
+7. [N] Phân tích kết quả dự đoán (1,0 điểm)
+   Yêu cầu cần đạt: Phân tích lỗi: các mẫu/nhóm dữ liệu dự đoán sai nhiều, so sánh kết quả trên tập huấn luyện và tập kiểm định để nhận diện quá khớp/chưa khớp
+   Minh chứng đánh giá: Mục phân tích lỗi trong báo cáo
+
+8. [CN] Giải thích nguyên lý thuật toán (1,0 điểm)
+   Yêu cầu cần đạt: Trình bày được ý tưởng, hàm mục tiêu/tiêu chí tối ưu và vai trò các siêu tham số chính của thuật toán đã dùng
+   Minh chứng đánh giá: Vấn đáp cá nhân
+
+9. [CN] Giải thích hoạt động của mô hình trên dữ liệu dự án (1,0 điểm)
+   Yêu cầu cần đạt: Giải thích được vì sao mô hình này cho kết quả tốt/kém hơn mô hình kia trên dữ liệu của nhóm; các đặc trưng ảnh hưởng nhiều đến dự đoán
+   Minh chứng đánh giá: Vấn đáp cá nhân
+
+10. [CN] Thực hành cá nhân tại chỗ (1,0 điểm)
+   Yêu cầu cần đạt: Trong 10–15 phút, thực hiện yêu cầu của giảng viên trên mã nguồn của nhóm (đổi một siêu tham số, thêm một chỉ số đánh giá, thay một thuật toán) và đọc đúng kết quả
+   Minh chứng đánh giá: Thao tác trực tiếp
+
+Tổng điểm: 10,0
+
+Hướng dẫn chấm và lưu ý – Bài kiểm tra 2:
+- Tiêu chí 1: chọn thuật toán không phù hợp loại bài toán (ví dụ dùng mô hình hồi quy cho bài toán phân loại mà không giải thích) tối đa 0,25.
+- Tiêu chí 3–5: còn rò rỉ dữ liệu đã được nhắc ở Bài kiểm tra 1 thì tối đa 0,5 cho tiêu chí liên quan.
+- Tiêu chí 4: giảng viên chạy thử; mã nguồn không chạy được, thiếu dữ liệu hoặc phụ thuộc đường dẫn máy cá nhân tối đa 0,5.
+- Tiêu chí 6: chỉ báo cáo Accuracy cho dữ liệu mất cân bằng tối đa 0,5.
+- Tiêu chí 8–10 hỏi trên chính thuật toán và mã nguồn của nhóm; không yêu cầu chứng minh toán học đầy đủ.
+
+
+====================================================================================================
+III. BÀI KIỂM TRA 3 – TUẦN 8: TỐI ƯU HÓA, CẢI TIẾN VÀ SO SÁNH MÔ HÌNH
+====================================================================================================
+
+1. [N] Phân tích hạn chế của mô hình ban đầu (1,0 điểm)
+   Yêu cầu cần đạt: Chỉ ra hạn chế dựa trên bằng chứng (chênh lệch huấn luyện – kiểm định, đường cong học tập, lỗi tập trung ở nhóm dữ liệu cụ thể…)
+   Minh chứng đánh giá: Mục phân tích hạn chế, hình vẽ
+
+2. [N] Đề xuất giải pháp cải tiến (1,0 điểm)
+   Yêu cầu cần đạt: Đề xuất ít nhất 2 giải pháp, mỗi giải pháp gắn với một hạn chế cụ thể và có cơ sở lý thuyết
+   Minh chứng đánh giá: Bảng hạn chế – giải pháp
+
+3. [N] Cải tiến dữ liệu và đặc trưng (1,0 điểm)
+   Yêu cầu cần đạt: Thực hiện ít nhất một cải tiến về dữ liệu/đặc trưng (thiết kế đặc trưng mới, lựa chọn đặc trưng, giảm chiều, xử lý mất cân bằng…) và đo được tác động
+   Minh chứng đánh giá: Mã nguồn, kết quả trước – sau
+
+4. [N] Thử nghiệm thuật toán hoặc cấu hình khác (1,0 điểm)
+   Yêu cầu cần đạt: Thử nghiệm ít nhất một thuật toán mới hoặc phương pháp tổ hợp (Bagging, Boosting, Voting/Stacking…) hoặc cấu hình mô hình khác
+   Minh chứng đánh giá: Mã nguồn, bảng kết quả
+
+5. [N] Tối ưu hóa siêu tham số (1,0 điểm)
+   Yêu cầu cần đạt: Xác định không gian siêu tham số hợp lý; tìm kiếm bằng Grid/Random Search hoặc Bayesian Optimization trên kiểm định chéo; không dùng tập kiểm tra để chọn siêu tham số
+   Minh chứng đánh giá: Mã nguồn, bảng siêu tham số tối ưu
+
+6. [N] So sánh trước và sau cải tiến (1,0 điểm)
+   Yêu cầu cần đạt: Bảng so sánh thống nhất (cùng dữ liệu, cùng cách chia, cùng chỉ số); thể hiện đóng góp của từng thay đổi (ablation)
+   Minh chứng đánh giá: Bảng so sánh
+
+7. [N] Khả năng tổng quát hóa (1,0 điểm)
+   Yêu cầu cần đạt: Đánh giá mô hình cuối trên tập kiểm tra giữ lại; so sánh kết quả kiểm định và kiểm tra; nhận xét độ ổn định qua các fold hoặc các lần chạy
+   Minh chứng đánh giá: Kết quả trên tập kiểm tra, độ lệch chuẩn
+
+8. [N] Trực quan hóa kết quả thực nghiệm (1,0 điểm)
+   Yêu cầu cần đạt: Có biểu đồ so sánh các mô hình, đường cong học tập/kiểm định hoặc biểu đồ phù hợp; trục, nhãn, đơn vị rõ ràng; mỗi biểu đồ có nhận xét
+   Minh chứng đánh giá: Hình vẽ trong báo cáo
+
+9. [CN] Giải thích kết quả và lựa chọn mô hình cuối (1,0 điểm)
+   Yêu cầu cần đạt: Giải thích được vì sao cải tiến có/không hiệu quả; lựa chọn mô hình cuối dựa trên đánh đổi giữa độ chính xác, độ ổn định, thời gian và khả năng diễn giải
+   Minh chứng đánh giá: Vấn đáp cá nhân
+
+10. [CN] Thực hành cá nhân tại chỗ (1,0 điểm)
+   Yêu cầu cần đạt: Thực hiện một thử nghiệm nhỏ theo yêu cầu (thay khoảng tìm kiếm siêu tham số, chạy kiểm định chéo, vẽ đường cong kiểm định) và nhận xét kết quả
+   Minh chứng đánh giá: Thao tác trực tiếp
+
+Tổng điểm: 10,0
+
+Hướng dẫn chấm và lưu ý – Bài kiểm tra 3:
+- Cải tiến không làm tăng chỉ số vẫn có thể đạt điểm cao nếu được thực hiện đúng phương pháp và giải thích được nguyên nhân; không chấm theo độ lớn của chỉ số.
+- Tiêu chí 5: dùng tập kiểm tra để chọn siêu tham số thì tiêu chí 5 và 7 tối đa 0,25.
+- Tiêu chí 6: so sánh các kết quả không cùng điều kiện (khác cách chia, khác chỉ số) tối đa 0,5.
+- Tiêu chí 8: biểu đồ thiếu nhãn trục hoặc không có nhận xét tối đa 0,5.
+
+
+====================================================================================================
+IV. BÀI THI KẾT THÚC – TUẦN 9: HOÀN THIỆN, TRÌNH DIỄN VÀ BẢO VỆ DỰ ÁN
+====================================================================================================
+
+1. [N] Mức độ hoàn thiện của dự án (1,0 điểm)
+   Yêu cầu cần đạt: Hoàn thành đầy đủ các nhiệm vụ của đề tài được giao; đã sửa các tồn tại được nhận xét ở 3 bài kiểm tra
+   Minh chứng đánh giá: Đối chiếu nhiệm vụ đề tài, nhận xét các mốc trước
+
+2. [N] Tính đúng đắn và đầy đủ của quy trình học máy (1,0 điểm)
+   Yêu cầu cần đạt: Quy trình xuyên suốt: bài toán → dữ liệu → tiền xử lý → mô hình → đánh giá → cải tiến; không rò rỉ dữ liệu, đánh giá đúng phương pháp
+   Minh chứng đánh giá: Báo cáo, mã nguồn
+
+3. [N] Chất lượng mã nguồn và khả năng chạy lại (1,0 điểm)
+   Yêu cầu cần đạt: Có README hướng dẫn chạy, danh sách thư viện (requirements), cố định seed; giảng viên chạy lại được và thu được kết quả tương đương báo cáo
+   Minh chứng đánh giá: Kho mã nguồn, chạy thử
+
+4. [N] Chất lượng mô hình và kết quả thực nghiệm (1,0 điểm)
+   Yêu cầu cần đạt: Mô hình cuối vượt mô hình cơ sở một cách có ý nghĩa hoặc giải thích rõ lý do; kết quả được báo cáo trung thực, đầy đủ
+   Minh chứng đánh giá: Bảng kết quả cuối, so sánh với baseline
+
+5. [N] Chất lượng báo cáo tiểu luận (1,0 điểm)
+   Yêu cầu cần đạt: Báo cáo theo mẫu của bộ môn: bố cục đầy đủ, văn phong khoa học, hình – bảng đúng quy cách, trích dẫn tài liệu tham khảo đầy đủ
+   Minh chứng đánh giá: Báo cáo tiểu luận
+
+6. [CN] Khả năng trình diễn dự án (1,0 điểm)
+   Yêu cầu cần đạt: Trình bày phần việc của mình rõ ràng, đúng thời gian; chạy chương trình minh họa (demo) trực tiếp
+   Minh chứng đánh giá: Buổi trình bày, demo
+
+7. [CN] Giải thích các phương pháp đã sử dụng (1,0 điểm)
+   Yêu cầu cần đạt: Giải thích đúng nguyên lý của phương pháp tiền xử lý, thuật toán và kỹ thuật tối ưu mà nhóm đã dùng, kể cả phần do thành viên kia thực hiện
+   Minh chứng đánh giá: Vấn đáp cá nhân
+
+8. [CN] Phân tích kết quả và hạn chế (1,0 điểm)
+   Yêu cầu cần đạt: Phân tích được ý nghĩa thực tế của kết quả, các hạn chế còn tồn tại (dữ liệu, mô hình, đánh giá) và hướng phát triển khả thi
+   Minh chứng đánh giá: Vấn đáp cá nhân
+
+9. [CN] Trả lời câu hỏi, bảo vệ giải pháp (1,0 điểm)
+   Yêu cầu cần đạt: Trả lời đúng, có lập luận các câu hỏi phản biện về lựa chọn phương pháp và tính đúng đắn của kết quả
+   Minh chứng đánh giá: Vấn đáp cá nhân
+
+10. [CN] Năng lực thực hành và đóng góp cá nhân (1,0 điểm)
+   Yêu cầu cần đạt: Thực hiện đúng yêu cầu thực hành tại chỗ trên mã nguồn của nhóm; đóng góp cá nhân thể hiện rõ qua bảng phân công và lịch sử commit/nhật ký công việc trong cả 9 tuần
+   Minh chứng đánh giá: Thao tác trực tiếp, lịch sử Git/nhật ký
+
+Tổng điểm: 10,0
+
+Hướng dẫn chấm và lưu ý – Bài thi kết thúc:
+- Tiêu chí 3: giảng viên chạy lại trước buổi bảo vệ; không chạy lại được hoặc kết quả khác xa báo cáo thì tiêu chí 3 tối đa 0,25 và tiêu chí 4 tối đa 0,5.
+- Tiêu chí 4: kết quả không trung thực (sửa số liệu, chỉ báo cáo lần chạy tốt nhất mà không nêu) thì tiêu chí 4 bằng 0.
+- Tiêu chí 6–9: mỗi sinh viên trình bày phần mình phụ trách và trả lời câu hỏi về cả phần của thành viên còn lại.
+- Tiêu chí 10: không có minh chứng đóng góp trong suốt quá trình thì tối đa 0,25 dù thực hành tại chỗ tốt.
+
+
+====================================================================================================
+V. HƯỚNG DẪN CHẤM ĐIỂM CÁ NHÂN ĐỐI VỚI NHÓM 2 SINH VIÊN
+====================================================================================================
+
+1. Nguyên tắc chung
+- Hai sinh viên trong nhóm được chấm theo cùng bộ 10 tiêu chí của mỗi bài; điểm mỗi bài của từng sinh viên là tổng 10 tiêu chí của chính sinh viên đó.
+- Không có điểm cộng ngoài 10 tiêu chí; không chia điểm theo tỷ lệ đóng góp tự khai.
+
+2. Tiêu chí sản phẩm nhóm [N]
+- Bước 1: Giảng viên chấm sản phẩm chung, được điểm nhóm cho tiêu chí (0 – 1,0).
+- Bước 2: Mỗi bài, giảng viên chọn ít nhất 2–3 tiêu chí [N] để hỏi nhanh từng sinh viên (1–2 câu/tiêu chí), xác định mức hiểu cá nhân:
+    1,00 – giải thích đầy đủ, chính xác;
+    0,75 – giải thích được phần lớn;
+    0,50 – giải thích được một phần;
+    0,25 – hầu như không giải thích được.
+- Bước 3: Điểm cá nhân của tiêu chí [N] = MIN(điểm nhóm, mức hiểu cá nhân).
+  Tiêu chí [N] không được hỏi thì sinh viên nhận điểm nhóm, trừ trường hợp ở mục 4 (Minh chứng đóng góp).
+- Như vậy sinh viên không giải thích được nội dung không thể nhận điểm tối đa chỉ vì sản phẩm nhóm tốt.
+
+3. Tiêu chí cá nhân [CN]
+- Chấm độc lập cho từng sinh viên qua vấn đáp, trình bày hoặc thực hành tại chỗ; không dùng điểm của thành viên còn lại.
+- Hai sinh viên được hỏi các câu khác nhau nhưng tương đương về độ khó; sinh viên này không trả lời thay sinh viên kia.
+
+4. Minh chứng đóng góp
+- Mỗi mốc nộp bảng phân công và nhật ký đóng góp (lịch sử commit Git hoặc nhật ký công việc có ngày).
+- Sinh viên không có minh chứng tham gia ở giai đoạn đang đánh giá: tất cả tiêu chí [N] của bài đó tối đa 0,5 đối với sinh viên này.
+- Nhóm có tranh chấp về đóng góp: giảng viên căn cứ lịch sử Git và vấn đáp để xác định điểm, không căn cứ tự khai.
+
+5. Liêm chính học thuật
+- Sao chép mã nguồn hoặc báo cáo của nhóm khác hay từ Internet mà không trích dẫn: các tiêu chí liên quan nhận 0 điểm.
+- Sử dụng công cụ AI tạo sinh phải ghi rõ phạm vi sử dụng trong báo cáo; sinh viên phải giải thích được mọi đoạn mã và nội dung đã nộp, nếu không thì áp dụng mục 2 (Tiêu chí sản phẩm nhóm [N]).
+
+6. Cơ cấu số tiêu chí cá nhân trong từng bài
+- Bài kiểm tra 1 (tuần 4): tiêu chí [N] 1–8; tiêu chí [CN] 9–10.
+- Bài kiểm tra 2 (tuần 6): tiêu chí [N] 1–7; tiêu chí [CN] 8–10.
+- Bài kiểm tra 3 (tuần 8): tiêu chí [N] 1–8; tiêu chí [CN] 9–10.
+- Bài thi kết thúc (tuần 9): tiêu chí [N] 1–5; tiêu chí [CN] 6–10.

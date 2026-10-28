@@ -1,0 +1,18 @@
+desktop.ini
+.ipynb_checkpoints/
+__pycache__/
+chơi game trong giơ.txt
+
+# LaTeX build files
+latext_page/*.aux
+latext_page/*.log
+latext_page/*.lof
+latext_page/*.lot
+latext_page/*.out
+latext_page/*.toc
+latext_page/*.synctex.gz
+latext_page/*.fdb_latexmk
+latext_page/*.fls
+
+# File khóa tạm của Office
+~$*

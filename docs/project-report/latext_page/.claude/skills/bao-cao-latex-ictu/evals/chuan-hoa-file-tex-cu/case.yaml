@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: chuan-hoa-file-tex-cu
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  File .tex chuẩn hóa biên dịch được bằng XeLaTeX; có bìa, nhận xét, cam đoan, cảm ơn, mục lục, danh mục hình/bảng; giữ nguyên các đoạn nội dung, hình và tất cả 6 tài liệu tham khảo cùng trích dẫn của file cũ.

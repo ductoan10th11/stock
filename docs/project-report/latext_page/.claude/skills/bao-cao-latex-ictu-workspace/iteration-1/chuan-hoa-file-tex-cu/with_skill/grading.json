@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "File .tex chuẩn hóa biên dịch bằng XeLaTeX ra PDF không có lỗi",
+      "passed": true,
+      "evidence": "Biên dịch lại bằng build.py: THÀNH CÔNG, 31 trang, không lỗi, không tham chiếu thiếu"
+    },
+    {
+      "text": "Có trang bìa ghi tên trường và loại báo cáo",
+      "passed": true,
+      "evidence": "tìm 'báo cáo' và 'trường' trong PDF"
+    },
+    {
+      "text": "Có đủ Lời cam đoan, Lời cảm ơn, Mục lục, Danh mục hình, Danh mục bảng",
+      "passed": true,
+      "evidence": "có đủ 5 phần"
+    },
+    {
+      "text": "Giữ đủ 6 tài liệu tham khảo cũ (alquraishi2021, lananh, tuananh2024, hai2017, thuan2022, thuy2023) và tất cả đều được trích dẫn",
+      "passed": true,
+      "evidence": "bibitem 6/6, được cite 6/6"
+    },
+    {
+      "text": "Giữ các đoạn nội dung cũ, gồm câu về Random Forest là mô hình tối ưu và kết quả Precision 43,70%",
+      "passed": true,
+      "evidence": "tìm câu Random Forest và 43,70 trong .tex"
+    },
+    {
+      "text": "Giữ cả 3 hình cũ (image1, image2, image3)",
+      "passed": true,
+      "evidence": "hình giữ lại: ['image1', 'image2', 'image3']"
+    },
+    {
+      "text": "Các trang trước phần nội dung đánh số La Mã, phần nội dung đánh số Ả Rập",
+      "passed": true,
+      "evidence": "nhãn trang: ['1', 'i', 'ii', 'iii']...['21', '22']"
+    },
+    {
+      "text": "Bookmark PDF có số thứ tự chương và mục",
+      "passed": true,
+      "evidence": "bookmark đầu: ['LỜI CAM ĐOAN', 'LỜI CẢM ƠN', 'BẢNG PHÂN CÔNG NHIỆM VỤ', 'DANH MỤC HÌNH ẢNH', 'DANH MỤC BẢNG', 'DANH MỤC TỪ VIẾT TẮT']"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  }
+}
