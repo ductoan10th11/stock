@@ -1,11 +1,10 @@
 \babel@toc {vietnamese}{}\relax 
 \contentsline {chapter}{LỜI CAM ĐOAN}{ii}{section*.3}%
 \contentsline {chapter}{LỜI CẢM ƠN}{iii}{section*.5}%
-\contentsline {chapter}{BẢNG PHÂN CÔNG NHIỆM VỤ}{iv}{section*.7}%
-\contentsline {chapter}{DANH MỤC HÌNH ẢNH}{viii}{chapter*.9}%
-\contentsline {chapter}{DANH MỤC BẢNG}{ix}{chapter*.10}%
-\contentsline {chapter}{DANH MỤC TỪ VIẾT TẮT}{x}{section*.12}%
-\contentsline {chapter}{MỞ ĐẦU}{1}{section*.14}%
+\contentsline {chapter}{DANH MỤC HÌNH ẢNH}{vii}{chapter*.7}%
+\contentsline {chapter}{DANH MỤC BẢNG}{viii}{chapter*.8}%
+\contentsline {chapter}{DANH MỤC TỪ VIẾT TẮT}{ix}{section*.10}%
+\contentsline {chapter}{MỞ ĐẦU}{1}{section*.12}%
 \contentsline {chapter}{\numberline {1}Tổng quan về học máy và bài toán dự đoán xu hướng giá cổ phiếu}{3}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Giới thiệu bài toán}{3}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Các công trình nghiên cứu liên quan}{3}{section.1.2}%
@@ -53,11 +52,10 @@
 \contentsline {subsection}{\numberline {3.10.1}Khả năng tổng quát hóa}{31}{subsection.3.10.1}%
 \contentsline {subsection}{\numberline {3.10.2}Lựa chọn mô hình cuối cùng}{31}{subsection.3.10.2}%
 \contentsline {section}{\numberline {3.11}Kết luận chương 3}{31}{section.3.11}%
-\contentsline {chapter}{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}{32}{section*.38}%
-\contentsline {chapter}{TÀI LIỆU THAM KHẢO}{33}{chapter*.39}%
+\contentsline {chapter}{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}{32}{section*.36}%
+\contentsline {chapter}{TÀI LIỆU THAM KHẢO}{33}{chapter*.37}%
 \renewcommand {\tocchapname }{Phụ lục}
 \contentsline {chapter}{\numberline {A}Hướng dẫn cài đặt và chạy chương trình}{35}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Yêu cầu môi trường}{35}{section.A.1}%
 \contentsline {section}{\numberline {A.2}Các bước thực hiện}{35}{section.A.2}%
-\contentsline {chapter}{\numberline {B}Nhật ký đóng góp của các thành viên}{36}{appendix.B}%
 \contentsfinish 

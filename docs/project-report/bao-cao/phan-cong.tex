@@ -1,0 +1,62 @@
+% !TEX program = xelatex
+% !TEX encoding = UTF-8 Unicode
+\documentclass[12pt,a4paper,oneside]{report}
+\input{preamble.tex}
+
+\begin{document}
+\pagestyle{plain}
+
+\unnumberedchapter{BẢNG PHÂN CÔNG NHIỆM VỤ}
+
+Nhóm 16 gồm hai thành viên. Công việc được chia theo hai mảng: mảng dữ liệu và báo cáo do \svAten{} phụ trách, mảng thu thập dữ liệu, mô hình và triển khai do \svBten{} phụ trách. Các nhiệm vụ chung như xác định bài toán, thống nhất thiết kế chống rò rỉ dữ liệu và rà soát kết quả do cả hai cùng thực hiện.
+
+\section*{1. Phân công theo thành viên}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{1cm}|p{3.4cm}|X|>{\centering\arraybackslash}p{2.5cm}|}
+  \hline
+  \rowcolor{black!8}\textbf{STT} & \textbf{Họ và tên} & \textbf{Nhiệm vụ phụ trách} & \textbf{Mức độ hoàn thành} \\ \hline
+  1 & \svAten\newline \svAma &
+    -- Làm sạch và tiền xử lý dữ liệu\newline
+    -- Tạo đặc trưng và nhãn ba lớp\newline
+    -- Phân tích khám phá dữ liệu (EDA)\newline
+    -- Đánh giá và kiểm thử mô hình\newline
+    -- Viết báo cáo\newline
+    -- Làm slide trình bày & \dots \\ \hline
+  2 & \svBten\newline \svBma &
+    -- Thu thập (crawl) dữ liệu nến từ API DNSE\newline
+    -- Huấn luyện và đánh giá mô hình\newline
+    -- Triển khai mô hình demo lên cloud & \dots \\ \hline
+\end{tabularx}
+\end{center}
+
+\section*{2. Phân công chi tiết theo công việc}
+
+\begin{center}
+\small\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{0.8cm}|X|>{\raggedright\arraybackslash}p{2.3cm}|>{\raggedright\arraybackslash}p{3.3cm}|>{\centering\arraybackslash}p{2.1cm}|}
+  \hline
+  \rowcolor{black!8}\textbf{STT} & \textbf{Công việc} & \textbf{Phụ trách} & \textbf{Sản phẩm} & \textbf{Trạng thái} \\ \hline
+  1 & Xác định bài toán, phạm vi và tiêu chí thành công & Cả nhóm & \texttt{docs/\allowbreak idea.md} & Hoàn thành \\ \hline
+  2 & Thu thập nến của TCB, CTG, VNM, ACB theo sáu khung thời gian & \svBten & \texttt{crawl.py}, \texttt{data/\allowbreak raw/\allowbreak } & Hoàn thành \\ \hline
+  3 & Thiết kế tiền xử lý, nhãn, đặc trưng và checklist chống rò rỉ dữ liệu & \svAten & \texttt{docs/\allowbreak data-\allowbreak preprocess.md} & Hoàn thành \\ \hline
+  4 & Làm sạch dữ liệu thô cho sáu khung nến & \svAten & \texttt{clean\_\allowbreak data.py}, \texttt{data/\allowbreak cleaned/\allowbreak } & Hoàn thành \\ \hline
+  5 & Tạo đặc trưng, \texttt{r\_\allowbreak next} và nhãn ba lớp & \svAten & \texttt{preprocess\_\allowbreak data.py}, \texttt{data/\allowbreak processed/\allowbreak } & Hoàn thành \\ \hline
+  6 & Phân tích khám phá dữ liệu và vẽ biểu đồ & \svAten & \texttt{notebooks/\allowbreak eda.ipynb}, \texttt{images/\allowbreak } & Hoàn thành \\ \hline
+  7 & Huấn luyện Hồi quy Logistic, Rừng ngẫu nhiên, XGBoost với kiểm định walk-forward & \svBten & Mã huấn luyện, bảng kết quả & Đang thực hiện \\ \hline
+  8 & Đánh giá, so sánh với mua và nắm giữ và dự đoán ngẫu nhiên & \svAten, \svBten & Chương 3 của báo cáo & Đang thực hiện \\ \hline
+  9 & Triển khai mô hình demo lên cloud & \svBten & Ứng dụng demo & Chưa thực hiện \\ \hline
+  10 & Viết báo cáo LaTeX & \svAten & \texttt{bao\_\allowbreak cao.tex} & Đang thực hiện \\ \hline
+  11 & Làm slide trình bày & \svAten & Tệp slide & Chưa thực hiện \\ \hline
+\end{tabularx}
+\end{center}
+
+\section*{3. Nguyên tắc làm việc chung}
+
+\begin{itemize}
+  \item Mã nguồn quản lý bằng Git; mỗi thành viên commit bằng tài khoản của chính mình, commit nhỏ và thông điệp rõ nghĩa.
+  \item Mọi đường dẫn trong mã tính tương đối so với thư mục gốc của kho, cố định \texttt{random\_\allowbreak state = 42}.
+  \item Số liệu trong báo cáo lấy từ mã chạy được của kho, không ghi tay.
+  \item Phần sử dụng AI tạo sinh được khai báo trong Lời cam đoan.
+\end{itemize}
+
+\end{document}

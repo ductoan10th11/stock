@@ -1,0 +1,80 @@
+% !TEX program = xelatex
+% !TEX encoding = UTF-8 Unicode
+\documentclass[12pt,a4paper,oneside]{report}
+\input{preamble.tex}
+
+\begin{document}
+\pagestyle{plain}
+
+\unnumberedchapter{NHẬT KÝ ĐÓNG GÓP}
+
+Nhóm quản lý mã nguồn và báo cáo trong một kho Git chung. Mỗi thành viên commit bằng tài khoản của chính mình nên lịch sử commit là minh chứng cho phần đóng góp của từng người. Mục này gồm ảnh chụp lịch sử commit, bảng thống kê và nhật ký công việc theo tuần.
+
+\section*{1. Lịch sử commit}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{commit.png}
+  \caption{Lịch sử commit của nhóm trên kho mã nguồn}
+  \label{fig:commit-history}
+\end{figure}
+
+\section*{2. Thống kê theo thành viên}
+
+\begin{table}[H]
+  \centering
+  \caption{Số commit của từng thành viên}
+  \label{tab:commit-count}
+  \begin{tabularx}{\textwidth}{p{4cm} >{\centering\arraybackslash}p{2.6cm} X}
+    \toprule
+    \textbf{Thành viên} & \textbf{Số commit} & \textbf{Nội dung chính} \\
+    \midrule
+    \svAten & 6 & Pipeline tiền xử lý, hình EDA và walk-forward, nội dung và bản dịch PDF của chương 3 \\
+    \svBten & 2 & Khởi tạo kho, thu thập dữ liệu thô, tài liệu hướng dẫn cho agent \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Số commit chỉ phản ánh một phần khối lượng công việc: một số commit chỉ cập nhật tệp sinh ra khi biên dịch LaTeX, trong khi các công việc như thiết kế tiền xử lý hay trao đổi thống nhất phương pháp không để lại commit riêng.
+
+\section*{3. Chi tiết các commit}
+
+\begin{table}[H]
+  \centering
+  \caption{Danh sách commit theo thời gian}
+  \label{tab:commit-list}
+  \small\begin{tabularx}{\textwidth}{p{1.9cm} p{1.6cm} p{2.7cm} >{\raggedright\arraybackslash}X}
+    \toprule
+    \textbf{Ngày} & \textbf{Mã} & \textbf{Thành viên} & \textbf{Nội dung} \\
+    \midrule
+    28/10/2026 & \texttt{828ad97} & \svBten & Khởi tạo kho; \texttt{crawl.py} và dữ liệu thô của 4 mã ở 6 khung nến \\
+    28/10/2026 & \texttt{37bfc3e} & \svBten & Thêm \texttt{AGENTS.md}: quy ước làm việc và chống rò rỉ dữ liệu \\
+    29/10/2026 & \texttt{fbcd21e} & \svAten & Thêm pipeline tiền xử lý đa khung: \texttt{clean\_data.py}, \texttt{preprocess\_data.py} \\
+    29/10/2026 & \texttt{89b08b4} & \svAten & Thêm hình EDA, hình walk-forward và phần phân tích vào chương 3 \\
+    29/10/2026 & \texttt{8845d44} & \svAten & Thêm bản xem trước HTML của chương 3 \\
+    29/10/2026 & \texttt{420eac0} & \svAten & Biên dịch lại \texttt{bao\_cao.pdf} với đầy đủ hình chương 3 \\
+    29/10/2026 & \texttt{a038bf2} & \svAten & Cập nhật tệp sinh ra khi biên dịch LaTeX \\
+    29/10/2026 & \texttt{f7010b9} & \svAten & Sửa lỗi màu hình trong PDF, chỉnh bố cục các mục 3.1--3.5 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section*{4. Nhật ký công việc theo tuần}
+
+\begin{table}[H]
+  \centering
+  \caption{Nhật ký công việc theo tuần}
+  \label{tab:nhatky}
+  \begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{2.4cm} p{3.2cm} X}
+    \toprule
+    \textbf{Tuần} & \textbf{Ngày} & \textbf{Thành viên} & \textbf{Công việc / commit} \\
+    \midrule
+    1 & 23/10/2026 & \svBten & Thu thập dữ liệu nến của 4 mã bằng \texttt{crawl.py} \\
+    1 & \dots & \svAten & Soạn báo cáo tuần 1 (Mở đầu, Chương 2, Chương 3) \\
+    2 & 29/10/2026 & \svAten & Làm sạch 6 khung nến; tạo 25--30 đặc trưng và nhãn ba lớp cho toàn bộ 6 khung; cập nhật báo cáo \\
+    \dots & \dots & \dots & \dots \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\end{document}
