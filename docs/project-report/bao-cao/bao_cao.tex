@@ -241,7 +241,8 @@ mã nguồn của nhóm và có thể chạy lại được. Mọi tài liệu, 
 tham khảo đều được trích dẫn đầy đủ trong danh mục tài liệu tham khảo.
 
 \textbf{Khai báo sử dụng công cụ AI tạo sinh.}
-Nhóm sử dụng công cụ AI tạo sinh \textbf{Claude} (Anthropic) trong các phạm vi sau:
+Nhóm sử dụng các công cụ AI tạo sinh \textbf{Claude} (Anthropic) và
+\textbf{Codex} (OpenAI) trong các phạm vi sau:
 \begin{itemize}
   \item gợi ý ý tưởng về hướng tiếp cận, đặc trưng và cách đánh giá mô hình;
   \item sửa lỗi mã nguồn;
@@ -778,7 +779,7 @@ SEED = 42
 TRAIN0, TEST, PURGE = 750, 63, 1
 
 def walk_forward(n):
-    for start in range(TRAIN0, n - TEST + 1, TEST):
+    for start in range(TRAIN0 + PURGE, n - TEST + 1, TEST):
         yield np.arange(0, start - PURGE), np.arange(start, start + TEST)
 
 mo_hinh = Pipeline([
@@ -870,9 +871,79 @@ có giá trị thiếu.
   \end{tabularx}
 \end{table}
 
-\huongdan{Đến mốc Bài kiểm tra 1 (tuần 4): bổ sung từ điển cho 25 đặc trưng và
-cột nhãn \texttt{label} sau tiền xử lý (tên, kiểu, công thức, ý nghĩa), số mẫu
-sau khi bỏ giai đoạn khởi động 35 phiên đầu.}
+Sau làm sạch, mã \texttt{preprocess\_data.py} tạo 25 đặc trưng số tại phiên $t$.
+Trong Bảng~\ref{tab:tudiendactrung}, $C_t,O_t,H_t,L_t,V_t$ lần lượt là giá đóng
+cửa, mở cửa, cao nhất, thấp nhất và khối lượng; mọi cửa sổ đều kết thúc tại $t$.
+
+\begin{longtable}{p{3.2cm} p{5.4cm} p{6.1cm}}
+  \caption{Từ điển 25 đặc trưng sau tiền xử lý}\label{tab:tudiendactrung}\\
+  \toprule
+  \textbf{Tên cột} & \textbf{Công thức} & \textbf{Ý nghĩa} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Tên cột} & \textbf{Công thức} & \textbf{Ý nghĩa} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  \texttt{close\_sma5}, \texttt{close\_sma10}, \texttt{close\_sma20}
+    & $C_t/\operatorname{SMA}_k(C)_t-1$, $k\in\{5,10,20\}$
+    & Vị trí giá so với trung bình động ngắn và trung hạn \\
+  \texttt{sma5\_sma20} & $\operatorname{SMA}_5/\operatorname{SMA}_{20}-1$
+    & Tín hiệu giao cắt trung bình động \\
+  \texttt{close\_ema12}, \texttt{close\_ema26}
+    & $C_t/\operatorname{EMA}_k(C)_t-1$, $k\in\{12,26\}$
+    & Vị trí giá so với trung bình động lũy thừa \\
+  \texttt{macd} & $(\operatorname{EMA}_{12}-\operatorname{EMA}_{26})/C_t$
+    & Động lượng đã chuẩn hóa theo mức giá \\
+  \texttt{macd\_signal} & $\operatorname{EMA}_9(\texttt{macd})$
+    & Đường tín hiệu của MACD \\
+  \texttt{macd\_hist} & $\texttt{macd}-\texttt{macd\_signal}$
+    & Khoảng cách MACD và đường tín hiệu \\
+  \texttt{rsi14} & RSI Wilder 14 phiên chia 100
+    & Động lượng trong khoảng $[0,1]$ \\
+  \texttt{bb\_pctb} & $(C_t-BB_{lower})/(BB_{upper}-BB_{lower})$
+    & Vị trí giá trong dải Bollinger 20 phiên \\
+  \texttt{bb\_width} & $(BB_{upper}-BB_{lower})/\operatorname{SMA}_{20}$
+    & Độ rộng dải Bollinger, đại diện biến động \\
+  \texttt{ret\_1}, \texttt{ret\_2}, \texttt{ret\_3}, \texttt{ret\_5}
+    & $\ln(C_t/C_{t-k})$, $k\in\{1,2,3,5\}$
+    & Lợi suất logarit các kỳ gần nhất \\
+  \texttt{body} & $(C_t-O_t)/O_t$
+    & Kích thước và chiều thân nến \\
+  \texttt{upper\_shadow} & $(H_t-\max(O_t,C_t))/C_t$
+    & Độ dài bóng nến trên \\
+  \texttt{lower\_shadow} & $(\min(O_t,C_t)-L_t)/C_t$
+    & Độ dài bóng nến dưới \\
+  \texttt{hl\_range} & $(H_t-L_t)/C_t$
+    & Biên độ dao động trong phiên \\
+  \texttt{volat\_5}, \texttt{volat\_20}
+    & Độ lệch chuẩn của \texttt{ret\_1} trong 5 và 20 phiên
+    & Biến động ngắn và trung hạn \\
+  \texttt{vol\_ratio} & $V_t/\operatorname{SMA}_{20}(V)_t$
+    & Khối lượng tương đối so với 20 phiên \\
+  \texttt{vol\_chg} & $\ln(V_t/V_{t-1})$
+    & Tốc độ thay đổi khối lượng \\
+  \texttt{atr14} & $\operatorname{SMA}_{14}(TR)_t/C_t$
+    & Average True Range 14 phiên đã chuẩn hóa theo giá \\
+\end{longtable}
+
+Trong đó $TR_t=\max(H_t-L_t,|H_t-C_{t-1}|,|L_t-C_{t-1}|)$. Đặc trưng
+\texttt{atr14} được bổ sung để đo biến động có xét khoảng trống giá qua đêm,
+đồng thời giải quyết chênh lệch giữa danh sách 24 đặc trưng ban đầu và thiết kế
+25 đặc trưng của báo cáo.
+
+Với các khung nội ngày, nhóm bổ sung năm đặc trưng
+\texttt{time\_sin}, \texttt{time\_cos}, \texttt{weekday\_sin},
+\texttt{weekday\_cos} và \texttt{is\_first\_bar}. Bốn cột sin/cos biểu diễn
+chu kỳ giờ trong ngày và thứ trong tuần mà không tạo điểm gián đoạn; cờ cuối
+đánh dấu nến đầu ngày, nơi \texttt{ret\_1} bao gồm khoảng trống giá qua đêm.
+Vì vậy dữ liệu 1D có 25 đặc trưng, còn mỗi khung nội ngày có 30 đặc trưng.
+
+Tệp đầu ra còn giữ \texttt{time} làm chỉ mục, \texttt{close} để vẽ và backtest,
+\texttt{r\_next} để tính lợi nhuận, cùng \texttt{label} là nhãn ba lớp. Hai cột
+nhìn về tương lai \texttt{r\_next} và \texttt{label} không thuộc danh sách đặc trưng.
 
 \section{Khảo sát và phân tích dữ liệu}
 
@@ -905,7 +976,7 @@ xây dựng mô hình.}
 \label{sec:chatluong}
 
 Bảng~\ref{tab:chatluong} tổng hợp các vấn đề đã kiểm tra trên dữ liệu thô của
-bốn mã, kèm cách xử lý dự kiến.
+bốn mã và cách xử lý đã được cài đặt trong \texttt{clean\_data.py}.
 
 \begin{longtable}{p{2.9cm} >{\centering\arraybackslash}p{3.4cm} p{8.6cm}}
   \caption{Thống kê các vấn đề chất lượng dữ liệu và cách xử lý}\label{tab:chatluong}\\
@@ -925,12 +996,28 @@ bốn mã, kèm cách xử lý dự kiến.
     OHLC sai logic (\texttt{open}/\texttt{close} ngoài $[\texttt{low},\texttt{high}]$) & 3 nến: TCB 18/07/2019; VNM 15/07/2019 và 30/08/2019 & Kẹp lại \texttt{high} $=\max(o,h,c)$, \texttt{low} $=\min(o,l,c)$ để giữ nguyên số nến \\
     Biến động bất thường & ACB có 12 phiên $>7{,}5\%$ đến 06/2020 & Giữ nguyên: đều nằm trong biên $\pm 10\%$ của HNX nên là biến động thật \\
     Nến chưa đóng & 0 (nến cuối là 23/10/2026) & Bỏ nến của ngày hiện tại nếu thu thập trước 15:00 \\
-    Mất cân bằng lớp (giảm / ngang / tăng, $\theta = 0{,}5\%$) & TCB 34/30/36\%; CTG 36/28/36\%; VNM 33/37/30\%; ACB 31/34/34\% & Ba lớp gần cân bằng nên không cần lấy mẫu lại; đánh giá bằng F1 macro và ROC-AUC macro thay vì chỉ Accuracy \\
+    Mất cân bằng lớp (giảm / ngang / tăng, $\theta = 0{,}5\%$) & TCB 706/614/741; CTG 876/688/894; VNM 803/911/744; ACB 764/845/846 & Ba lớp gần cân bằng nên không cần lấy mẫu lại; đánh giá bằng F1 macro và ROC-AUC macro thay vì chỉ Accuracy \\
     Nguy cơ rò rỉ dữ liệu & Hai cột nhìn về tương lai: \texttt{label}, \texttt{r\_next} & Không đưa vào đặc trưng; chia dữ liệu theo thời gian, bỏ 1 phiên giữa train và test, scaler chỉ fit trên tập train của từng fold \\
 \end{longtable}
 
-\huongdan{Đến mốc Bài kiểm tra 1: thêm so sánh trước--sau xử lý (số nến, thống
-kê mô tả, biểu đồ) và chạy lại các thống kê trên bằng mã tiền xử lý của nhóm.}
+\begin{table}[H]
+  \centering
+  \caption{So sánh số nến trước và sau làm sạch dữ liệu 1D}
+  \label{tab:truocsau}
+  \begin{tabular}{lrrrr}
+    \toprule
+    \textbf{Mã} & \textbf{Trước} & \textbf{Gộp trùng} & \textbf{Sửa OHLC} & \textbf{Sau} \\
+    \midrule
+    TCB & 2\,098 & 1 & 1 & 2\,097 \\
+    CTG & 2\,495 & 1 & 0 & 2\,494 \\
+    VNM & 2\,495 & 1 & 2 & 2\,494 \\
+    ACB & 2\,492 & 1 & 0 & 2\,491 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Sau làm sạch, cả bốn tệp không còn giá trị thiếu, ngày trùng, volume không dương
+hoặc nến vi phạm quan hệ OHLC. Các phiên biến động mạnh hợp lệ vẫn được giữ nguyên.
 
 \section{Chuẩn bị dữ liệu cho mô hình}
 Toàn bộ 25 đặc trưng đều là số nên không cần mã hóa biến phân loại; nhãn
@@ -941,12 +1028,12 @@ nhiên và XGBoost không cần chuẩn hóa. Dữ liệu không được xáo t
 gian bằng walk-forward như ở Mục~\ref{sec:quytrinh}.
 
 Sau khi bỏ 35 phiên khởi động (do chỉ báo dài nhất cần EMA26 rồi EMA9) và phiên cuối
-không có nhãn, kích thước dữ liệu dự kiến của mỗi mã theo thiết kế như ở
-Bảng~\ref{tab:kichthuoc}. Số liệu này sẽ được đối chiếu với kết quả của mã tiền xử lý.
+không có nhãn, mã tiền xử lý tạo ra kích thước dữ liệu thực tế ở
+Bảng~\ref{tab:kichthuoc}.
 
 \begin{table}[H]
   \centering
-  \caption{Kích thước dữ liệu và số fold walk-forward theo thiết kế}
+  \caption{Kích thước dữ liệu đã tiền xử lý và số fold walk-forward}
   \label{tab:kichthuoc}
   \begin{tabular}{lccccc}
     \toprule
@@ -960,10 +1047,43 @@ Bảng~\ref{tab:kichthuoc}. Số liệu này sẽ được đối chiếu với 
   \end{tabular}
 \end{table}
 
+Các tệp đầu ra bắt đầu từ 23/07/2018 đối với TCB và 14/12/2016 đối với ba mã
+còn lại; ngày cuối có nhãn là 22/10/2026. Số liệu chi tiết và phân bố nhãn được
+lưu tại \texttt{data/processed/1D/preprocessing\_summary.csv}.
+
+Ngoài khung chính 1D, quy trình đã tạo dữ liệu sẵn sàng cho thí nghiệm ở năm
+khung nội ngày. Ngưỡng nhãn được chọn theo độ biến động và bước giá thực tế
+trước khi huấn luyện; mỗi khung vẫn dùng ba lớp giảm, ngang và tăng.
+
+\begin{table}[H]
+  \centering
+  \caption{Quy tắc và kết quả tiền xử lý theo khung nến}
+  \label{tab:processedkhung}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    \textbf{Khung} & \textbf{$\theta$} & \textbf{Đặc trưng} & \textbf{Tổng mẫu} & \textbf{Train đầu} & \textbf{Test/fold} & \textbf{Fold/mã} \\
+    \midrule
+    1 phút  & 0,05\% & 30 & 56\,377 & 9\,000 & 1\,125 & 4 \\
+    5 phút  & 0,10\% & 30 & 11\,448 & 1\,800 & 225 & 4 \\
+    15 phút & 0,15\% & 30 & 3\,888  & 640 & 80 & 4 \\
+    30 phút & 0,15\% & 30 & 2\,124  & 315 & 45 & 4 \\
+    1 giờ   & 0,20\% & 30 & 9\,787  & 1\,000 & 125 & 11 \\
+    1 ngày  & 0,50\% & 25 & 9\,432  & 750 & 63 & 20--27 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Khung 1 phút có 57,4\% nến thuộc lớp ngang do nhiều nến không đổi giá; giảm
+ngưỡng không khắc phục được hiện tượng này vì bước giá rời rạc. Nhóm giữ nguyên
+dữ liệu, không lấy mẫu lại trước khi chia thời gian, và sẽ dùng F1 macro để
+tránh chỉ số bị chi phối bởi lớp ngang. Các khung còn lại có tỷ lệ lớp phù hợp
+để tiếp tục huấn luyện mà không cần tái lấy mẫu.
+
 \section{Môi trường thực nghiệm}
-\huongdan{Cấu hình máy, phiên bản Python và các thư viện chính
-(NumPy, Pandas, Scikit-learn\dots), giá trị \texttt{random\_state} cố định, cách
-chạy lại thí nghiệm (xem Phụ lục~\ref{pl:huongdan}).}
+Bước làm sạch và tạo đặc trưng được chạy trên Windows với Python 3.11.9,
+NumPy 2.0.2 và Pandas 2.3.3 trong môi trường ảo \texttt{.venv}. Các bước có yếu
+tố ngẫu nhiên ở giai đoạn huấn luyện sẽ dùng \texttt{random\_state = 42}. Cách
+chạy lại quy trình được trình bày trong Phụ lục~\ref{pl:huongdan}.
 
 \section{Kết quả huấn luyện và đánh giá}
 \huongdan{Báo cáo giá trị trung bình $\pm$ độ lệch chuẩn qua các fold.
@@ -971,7 +1091,7 @@ Tập kiểm tra chỉ dùng cho đánh giá cuối cùng.}
 
 \begin{table}[H]
   \centering
-  \caption{So sánh kết quả kiểm định chéo 5-fold của các mô hình}
+  \caption{So sánh kết quả kiểm định walk-forward của các mô hình}
   \label{tab:sosanh}
   \begin{tabular}{lccc}
     \toprule
@@ -1166,13 +1286,21 @@ Research, Greensboro.
 \end{itemize}
 
 \section{Các bước thực hiện}
-\huongdan{Viết các bước chạy lại từ đầu đến cuối (thu thập dữ liệu, tiền xử lý,
-huấn luyện, đánh giá, chạy demo) và đường dẫn bản demo trên cloud. Có thể chèn
-ảnh chụp màn hình vào thư mục \texttt{images/}.}
+Từ thư mục gốc của dự án, tạo môi trường, cài thư viện, làm sạch toàn bộ sáu
+khung nến rồi tạo tập đặc trưng và nhãn cho khung 1D bằng các lệnh sau:
 
 \begin{lstlisting}[language=bash,numbers=none]
-pip install -r requirements.txt
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements.txt
+.venv/Scripts/python clean_data.py
+.venv/Scripts/python preprocess_data.py
 \end{lstlisting}
+
+Các tệp trung gian được ghi vào \texttt{data/cleaned/<KHUNG>/}; tập sẵn sàng
+cho mô hình được ghi vào \texttt{data/processed/<KHUNG>/}. Hai loại tệp
+\texttt{cleaning\_summary.csv} và \texttt{preprocessing\_summary.csv} lưu số
+dòng trước--sau để kiểm tra khả năng chạy lại. Các lệnh huấn luyện, đánh giá và
+demo sẽ được bổ sung khi các mô-đun tương ứng hoàn thành.
 
 \chapter{Nhật ký đóng góp của các thành viên}
 \label{pl:nhatky}
@@ -1187,6 +1315,7 @@ pip install -r requirements.txt
     \midrule
     1 & 23/10/2026 & \svBten & Thu thập dữ liệu nến của 4 mã bằng \texttt{crawl.py} \\
     1 & \dots & \svAten & Soạn báo cáo tuần 1 (Mở đầu, Chương 2, Chương 3) \\
+    2 & 29/10/2026 & \svAten & Làm sạch 6 khung nến; tạo 25--30 đặc trưng và nhãn ba lớp cho toàn bộ 6 khung; cập nhật báo cáo \\
     \dots & \dots & \dots & \dots \\
     \bottomrule
   \end{tabularx}

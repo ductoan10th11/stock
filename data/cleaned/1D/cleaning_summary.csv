@@ -1,0 +1,5 @@
+resolution,symbol,rows_before,missing_rows_removed,invalid_price_rows_removed,invalid_volume_rows_removed,duplicate_rows_merged,ohlc_rows_corrected,incomplete_rows_removed,rows_after
+1D,TCB,2098,0,0,0,1,1,0,2097
+1D,CTG,2495,0,0,0,1,0,0,2494
+1D,VNM,2495,0,0,0,1,2,0,2494
+1D,ACB,2492,0,0,0,1,0,0,2491

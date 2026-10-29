@@ -7,7 +7,7 @@ Tài liệu mô tả cách biến dữ liệu nến thô thành bộ đặc trư
 | Hạng mục | Lựa chọn |
 |---|---|
 | Mã cổ phiếu | TCB, CTG, VNM, ACB |
-| Khung nến chính | 1D (khung 1H là mở rộng, xem mục 9) |
+| Khung nến | 1D là khung chính; 1, 5, 15, 30 phút và 1H là các thí nghiệm mở rộng |
 | Nhãn | 3 lớp: `-1` giảm, `0` ngang, `1` tăng |
 | Cách huấn luyện | Mô hình riêng cho từng mã |
 | Kiểm định | Walk-forward, cửa sổ mở rộng |
@@ -45,6 +45,52 @@ Các lỗi đã kiểm tra trên dữ liệu thực tế và cách xử lý:
 | Giá trị thiếu | Không có | Nếu có thì bỏ dòng, không nội suy |
 | Biến động bất thường (vượt biên độ sàn) | ACB có 12 phiên >7.5% đến 06/2020, đều nằm trong biên ±10% của HNX | Giữ nguyên |
 | Nến chưa đóng | Nến ngày hiện tại khi crawl trong giờ giao dịch | Bỏ nến của ngày hiện tại nếu crawl trước 15:00 |
+
+Mã thực hiện là `clean_data.py`. Chạy từ thư mục gốc dự án:
+
+```bash
+python clean_data.py
+```
+
+Dữ liệu thô không bị ghi đè. Script xử lý cả sáu khung `1`, `5`, `15`, `30`,
+`1H`, `1D` và lưu 24 tệp tại `data/cleaned/<KHUNG>/<MÃ>.csv`. Timestamp của
+dữ liệu nội ngày được giữ ở dạng `YYYY-MM-DD HH:MM`; dữ liệu ngày dùng
+`YYYY-MM-DD`. Báo cáo tổng hợp được lưu tại
+`data/cleaned/cleaning_summary.csv`, đồng thời mỗi thư mục khung có một
+`cleaning_summary.csv` riêng.
+
+| Khung | Số tệp | Số dòng trước | Số dòng sau | Gộp trùng | Sửa OHLC |
+|---|---:|---:|---:|---:|---:|
+| 1 | 4 | 56.521 | 56.521 | 0 | 0 |
+| 5 | 4 | 11.592 | 11.592 | 0 | 0 |
+| 15 | 4 | 4.032 | 4.032 | 0 | 0 |
+| 30 | 4 | 2.268 | 2.268 | 0 | 0 |
+| 1H | 4 | 9.931 | 9.931 | 0 | 0 |
+| 1D | 4 | 9.580 | 9.576 | 4 | 3 |
+
+Chi tiết kết quả khung 1D:
+
+| Mã | Số dòng trước | Gộp dòng trùng | Sửa OHLC | Số dòng sau |
+|---|---:|---:|---:|---:|
+| TCB | 2098 | 1 | 1 | 2097 |
+| CTG | 2495 | 1 | 0 | 2494 |
+| VNM | 2495 | 1 | 2 | 2494 |
+| ACB | 2492 | 1 | 0 | 2491 |
+
+### Bộ dữ liệu riêng theo `SKILLFILTER.md`
+
+`filter_data.py` tạo một bộ dữ liệu nhị phân riêng theo hướng dẫn lọc cổ phiếu
+ngân hàng:
+
+```bash
+python filter_data.py
+```
+
+Kết quả được lưu tại `data/filtered/bank_stocks_clean.csv`, kèm báo cáo
+`data/filtered/data_report.md`. Bộ dữ liệu này chỉ giữ TCB, CTG và ACB; VNM bị
+loại vì không phải ngân hàng. Đây là nhánh dữ liệu thử nghiệm theo
+`SKILLFILTER.md`, không thay thế bộ dữ liệu chính của đề tài gồm bốn mã và nhãn
+ba lớp.
 
 ## 3. Nhãn
 
@@ -110,6 +156,7 @@ So sánh: θ = 0.3% làm lớp "ngang" chỉ còn ~20%, còn θ = 0.2% thì còn
 | `volat_5`, `volat_20` | Độ lệch chuẩn của `ret_1` trên cửa sổ 5 và 20 phiên |
 | `vol_ratio` | `volume / SMA(volume, 20)` |
 | `vol_chg` | `ln(volume[t] / volume[t-1])` |
+| `atr14` | Trung bình 14 phiên của True Range, chia cho `close` |
 
 Tổng cộng có **25 đặc trưng**: 12 thuộc nhóm lõi và 13 thuộc nhóm bổ trợ. Nhóm lõi đáp ứng yêu cầu của đề. Nhóm bổ trợ được đánh giá riêng trong một thí nghiệm so sánh "chỉ nhóm lõi" với "lõi + bổ trợ".
 
@@ -153,14 +200,43 @@ fold 3: [============ train 876 ============][test 63]
 ## 7. Đầu ra
 
 ```
-data/processed/1D/<MÃ>.csv
+data/processed/<KHUNG>/<MÃ>.csv
 ```
+
+Mã tạo đặc trưng và nhãn là `preprocess_data.py`. Chạy sau bước làm sạch:
+
+```bash
+python preprocess_data.py
+```
+
+Script xử lý cả sáu khung `1`, `5`, `15`, `30`, `1H`, `1D`. Báo cáo tổng hợp
+được lưu tại `data/processed/preprocessing_summary.csv`; mỗi thư mục khung có
+một `preprocessing_summary.csv` riêng.
+
+| Khung | Ngưỡng θ | Đặc trưng | Tổng mẫu | Giảm/Ngang/Tăng | Train đầu | Test/fold | Số fold/mã |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 0.05% | 30 | 56.377 | 21.6/57.4/21.0% | 9.000 | 1.125 | 4 |
+| 5 | 0.10% | 30 | 11.448 | 30.8/41.3/28.0% | 1.800 | 225 | 4 |
+| 15 | 0.15% | 30 | 3.888 | 37.5/30.4/32.1% | 640 | 80 | 4 |
+| 30 | 0.15% | 30 | 2.124 | 41.6/23.8/34.7% | 315 | 45 | 4 |
+| 1H | 0.20% | 30 | 9.787 | 33.6/37.9/28.5% | 1.000 | 125 | 11 |
+| 1D | 0.50% | 25 | 9.432 | 33.4/32.4/34.2% | 750 | 63 | 20--27 |
+
+Kết quả chi tiết khung 1D:
+
+| Mã | Số mẫu | Số đặc trưng | Giảm | Ngang | Tăng |
+|---|---:|---:|---:|---:|---:|
+| TCB | 2061 | 25 | 706 | 614 | 741 |
+| CTG | 2458 | 25 | 876 | 688 | 894 |
+| VNM | 2458 | 25 | 803 | 911 | 744 |
+| ACB | 2455 | 25 | 764 | 845 | 846 |
 
 | Cột | Vai trò |
 |---|---|
 | `time` | Chỉ mục thời gian |
 | `close` | Dùng cho backtest và vẽ biểu đồ, **không phải đặc trưng** |
-| 25 cột đặc trưng (mục 4) | `X` |
+| 25 cột đặc trưng gốc (mục 4) | `X` của khung 1D |
+| 5 cột thời gian | Thêm vào `X` của các khung nội ngày |
 | `r_next` | Dùng cho backtest, **không phải đặc trưng** |
 | `label` | `y` ∈ {-1, 0, 1} |
 
@@ -182,20 +258,37 @@ Bước tiền xử lý phải giữ đủ thông tin để tính các chỉ s�
   - Mua và nắm giữ trên đúng các khối test.
   - Dự đoán ngẫu nhiên theo tỷ lệ lớp của tập train, lặp nhiều lần với các seed khác nhau và lấy trung bình.
 
-## 9. Mở rộng: khung 1H
+## 9. Quy tắc cho các khung nội ngày
 
-Áp dụng cùng quy trình cho `data/raw/1H/` (khoảng 2480 nến mỗi mã, 2 năm), với các khác biệt sau:
+Các khung nội ngày dùng chung 25 đặc trưng giá/khối lượng ở mục 4 và thêm 5
+đặc trưng thời gian:
 
-- Ngưỡng nhãn **θ = 0.2%**, vì độ lệch chuẩn lợi suất giờ chỉ khoảng 0.7–0.8%. Tỷ lệ các lớp xấp xỉ 34% / 38% / 28%.
-- Thêm đặc trưng giờ trong ngày và thứ trong tuần, mã hoá dạng sin/cos.
-- Thêm cờ `is_first_bar` cho nến đầu phiên. Khi đó `ret_1` của nến đầu phiên chứa cả khoảng gap qua đêm.
-- Walk-forward: train ban đầu khoảng 1000 nến, mỗi khối test khoảng 125 nến (khoảng 1 tháng).
+| Đặc trưng | Công thức hoặc ý nghĩa |
+|---|---|
+| `time_sin`, `time_cos` | Mã hóa tuần hoàn phút trong ngày bằng sin/cos |
+| `weekday_sin`, `weekday_cos` | Mã hóa tuần hoàn thứ trong tuần bằng sin/cos |
+| `is_first_bar` | Bằng 1 tại nến đầu tiên của mỗi ngày giao dịch |
+
+`ret_1` tại nến đầu ngày chứa khoảng trống giá qua đêm; `is_first_bar` giúp mô
+hình phân biệt trường hợp này. Nhãn luôn dùng nến kế tiếp trong chuỗi thời gian,
+kể cả từ nến cuối ngày sang nến đầu ngày kế tiếp.
+
+Ngưỡng ở Bảng trên được chốt trước khi huấn luyện từ độ lệch chuẩn lợi suất,
+bước giá thực tế và phân bố ba lớp. Với khung 1 phút, 57.4% nến thuộc lớp ngang
+do nhiều nến không đổi giá; hạ ngưỡng không giảm được tỷ lệ này nên không lấy
+mẫu lại ở bước tiền xử lý. F1 macro được dùng để tránh kết quả bị chi phối bởi
+lớp ngang.
+
+Mỗi khung bỏ 35 nến đầu để khởi động chỉ báo và bỏ nến cuối vì không có nhãn.
+Walk-forward dùng cửa sổ mở rộng, gap 1 nến và các khối test không chồng lấn.
+Kích thước train/test được chọn theo số nến mỗi phiên để mỗi mã có ít nhất 4
+fold; riêng 1H có 11 fold và 1D có 20--27 fold.
 
 ## 10. Checklist chống rò rỉ dữ liệu
 
-- [ ] Đặc trưng tại `t` chỉ dùng dữ liệu đến hết phiên `t`. Không có `shift(-k)` nào trong phần tạo đặc trưng.
-- [ ] Nhãn và `r_next` là hai cột duy nhất nhìn về tương lai, và cả hai không nằm trong `X`.
+- [x] Đặc trưng tại `t` chỉ dùng dữ liệu đến hết phiên `t`. Không có `shift(-k)` nào trong phần tạo đặc trưng.
+- [x] Nhãn và `r_next` là hai cột duy nhất nhìn về tương lai, và cả hai không nằm trong `X`.
 - [ ] Mọi phép chia đều theo thời gian. Không xáo trộn dữ liệu, không dùng `train_test_split` ngẫu nhiên.
 - [ ] Scaler, lọc đặc trưng và siêu tham số chỉ được fit hoặc chọn trên tập train của từng fold.
-- [ ] Có purge 1 phiên giữa train và test.
-- [ ] Bỏ nến chưa đóng của ngày hiện tại.
+- [x] Cấu hình mọi khung có purge 1 nến giữa train và test.
+- [x] Bỏ nến chưa đóng của ngày hiện tại.
