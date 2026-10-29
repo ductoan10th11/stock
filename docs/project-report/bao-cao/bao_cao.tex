@@ -946,31 +946,176 @@ Tệp đầu ra còn giữ \texttt{time} làm chỉ mục, \texttt{close} để 
 nhìn về tương lai \texttt{r\_next} và \texttt{label} không thuộc danh sách đặc trưng.
 
 \section{Khảo sát và phân tích dữ liệu}
+\label{sec:khaosat}
 
-\subsection{Thống kê và phân bố dữ liệu}
-\huongdan{Thống kê mô tả; biểu đồ phân bố các đặc trưng chính và phân bố nhãn.
-Mỗi biểu đồ phải có nhận xét cụ thể.}
+\subsection{Biến động giá và khối lượng theo thời gian}
+Hình~\ref{fig:closevolume} biểu diễn chuỗi giá đóng cửa và khối lượng giao dịch
+hằng ngày của bốn mã cổ phiếu trong toàn bộ giai đoạn thu thập dữ liệu.
 
 \begin{figure}[H]
   \centering
-  \khunghinh{10cm}{5.5cm}{Biểu đồ phân bố nhãn\\(thay bằng \textbackslash includegraphics)}
-  \caption{Phân bố nhãn trong tập dữ liệu}
+  \includegraphics[width=\textwidth]{close_volume.png}
+  \caption{Giá đóng cửa và khối lượng giao dịch ngày của bốn mã cổ phiếu}
+  \label{fig:closevolume}
+\end{figure}
+
+\textit{Nhận xét:}
+\begin{itemize}
+  \item Ba cổ phiếu ngân hàng (TCB, CTG, ACB) có xu hướng tăng trưởng dài hạn
+    rõ rệt từ năm 2017 đến cuối 2026, xen kẽ các chu kỳ điều chỉnh mạnh tương ứng
+    với biến động kinh tế vĩ mô: đợt bán tháo do đại dịch COVID-19 (quý 1/2020) và
+    giai đoạn thắt chặt tín dụng, thanh lọc thị trường trái phiếu doanh nghiệp (nửa
+    cuối 2022). Ngược lại, cổ phiếu tiêu dùng VNM duy trì xu hướng đi ngang và giảm
+    nhẹ sau vùng đỉnh năm 2018.
+  \item Khối lượng giao dịch có xu hướng gia tăng đột biến tại các vùng đáy điều
+    chỉnh và các giai đoạn thị trường đảo chiều (hiện tượng cao trào khối lượng --
+    \textit{volume climax}), phản ánh dòng tiền bắt đáy hoặc phân phối mạnh.
+  \item Tính chất phi dừng (non-stationarity) rõ rệt của giá đóng cửa (trung bình
+    và phương sai thay đổi liên tục theo thời gian) khẳng định tính đúng đắn của
+    nguyên tắc thiết kế: \textbf{không đưa chuỗi giá thô vào mô hình học máy}, mà
+    chuyển hóa thành các tỷ số so với đường trung bình và các chỉ báo kỹ thuật dừng.
+\end{itemize}
+
+\subsection{Phân bố lợi suất ngày}
+Hình~\ref{fig:returndist} minh họa phân bố tần suất và hàm mật độ của lợi suất
+logarit ngày $r_t = \ln(C_t / C_{t-1})$ cho từng mã.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{return_dist.png}
+  \caption{Phân bố tần suất lợi suất logarit ngày của bốn mã}
+  \label{fig:returndist}
+\end{figure}
+
+\textit{Nhận xét:}
+\begin{itemize}
+  \item Lợi suất ngày của cả bốn mã phân bố gần đối xứng quanh giá trị trung bình
+    xấp xỉ 0 ($\mu \in [0{,}0003;\, 0{,}0007]$), nhưng có dạng nhọn ở đỉnh và đuôi
+    dày (leptokurtic) rõ rệt so với phân phối chuẩn Gauss. Hiện tượng này đặc trưng
+    cho dữ liệu tài chính với tần suất xuất hiện các phiên biến động lớn cao hơn lý
+    thuyết xác suất cổ điển.
+  \item Độ lệch chuẩn lợi suất ngày $\sigma$ dao động từ $1{,}54\%$ (VNM) đến
+    $2{,}08\%$ (TCB), phản ánh mức độ rủi ro và biên độ dao động của nhóm ngân hàng
+    cao hơn đáng kể so với nhóm hàng tiêu dùng thiết yếu.
+  \item Ngưỡng phân lớp $\theta = 0{,}5\%$ tương ứng với khoảng $0{,}25\sigma$ đến
+    $0{,}33\sigma$, nằm vừa vặn trong vùng biến động thường nhật và tương đương với
+    chi phí giao dịch thực tế (thuế $0{,}1\%$ + phí môi giới hai chiều $0{,}3\%$).
+\end{itemize}
+
+\subsection{Phân bố nhãn xu hướng}
+Hình~\ref{fig:phanbonhan} thống kê số lượng và tỷ lệ phần trăm của ba lớp nhãn
+(giảm: $-1$, ngang: $0$, tăng: $1$) với ngưỡng $\theta = 0{,}5\%$ trên tập dữ liệu
+đã tiền xử lý.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{label_dist.png}
+  \caption{Số lượng và tỷ lệ phân bố ba lớp nhãn ($\theta = 0{,}5\%$) sau tiền xử lý}
   \label{fig:phanbonhan}
 \end{figure}
 
-\textit{Nhận xét:} Hình~\ref{fig:phanbonhan} cho thấy\dots
+\textit{Nhận xét:}
+\begin{itemize}
+  \item Tỷ lệ ba lớp tương đối cân bằng trên cả bốn mã: lớp giảm chiếm
+    $31{,}1\%\text{--}35{,}6\%$, lớp ngang chiếm $28{,}0\%\text{--}37{,}1\%$, và
+    lớp tăng chiếm $30{,}3\%\text{--}36{,}4\%$. Do độ lệch giữa các lớp không vượt
+    quá $40\%$, tập dữ liệu không cần áp dụng các kỹ thuật cân bằng nhân tạo như
+    SMOTE hay Random Undersampling (tránh nguy cơ bóp méo phân phối thời gian).
+  \item Mã VNM có tỷ lệ phiên đi ngang cao nhất ($37{,}1\%$), phù hợp với độ biến
+    động thấp đã quan sát ở phân bố lợi suất. Các mã tăng trưởng mạnh như TCB và
+    CTG có tỷ lệ lớp tăng chiếm ưu thế ($36{,}0\%$ và $36{,}4\%$).
+  \item Để đánh giá khách quan hiệu năng trên bài toán ba lớp gần cân bằng này,
+    nhóm lựa chọn F1 macro và ROC-AUC macro làm các thước đo chất lượng chính thay
+    vì chỉ dùng Accuracy.
+\end{itemize}
 
-\subsection{Quan hệ giữa các đặc trưng}
+\subsection{Tự tương quan của chuỗi lợi suất}
+Hình~\ref{fig:autocorr} biểu diễn hệ số tự tương quan (Autocorrelation Function --
+ACF) của chuỗi lợi suất ngày từ độ trễ 1 đến 20 phiên.
 
 \begin{figure}[H]
   \centering
-  \khunghinh{10cm}{6.5cm}{Ma trận tương quan giữa các đặc trưng}
-  \caption{Ma trận tương quan giữa các đặc trưng}
+  \includegraphics[width=\textwidth]{autocorr.png}
+  \caption{Hàm tự tương quan (ACF) của lợi suất ngày đến lag 20 kèm dải tin cậy 95\%}
+  \label{fig:autocorr}
+\end{figure}
+
+\textit{Nhận xét:}
+\begin{itemize}
+  \item Hệ số tự tương quan tại hầu hết các độ trễ đều rất nhỏ ($|r| < 0{,}05$) và
+    nằm hoàn toàn bên trong dải tin cậy 95\% ($\pm 1{,}96/\sqrt{n}$, biểu thị bằng
+    đường nét đứt xám).
+  \item Kết quả này hoàn toàn nhất quán với Giả thuyết thị trường hiệu quả dạng yếu
+    (Weak-form EMH) của Fama~\cite{fama1970}: lợi suất phiên kế tiếp không có quan
+    hệ tuyến tính trực tiếp với lợi suất các phiên quá khứ gần nhất.
+  \item Điều đó giải thích vì sao các mô hình tuyến tính đơn giản chỉ dùng độ trễ
+    giá thường thất bại, và đặt ra sự cần thiết phải tích hợp các chỉ báo động lượng,
+    xu hướng và biến động phi tuyến, cùng các thuật toán phi tuyến tính như Rừng
+    ngẫu nhiên và XGBoost.
+\end{itemize}
+
+\subsection{Quan hệ tương quan giữa các đặc trưng}
+Hình~\ref{fig:tuongquan} trình bày ma trận tương quan Pearson giữa 25 đặc trưng sau
+khi chuẩn hóa, được tính toán trên toàn bộ dữ liệu gộp của bốn mã cổ phiếu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{corr_matrix.png}
+  \caption{Ma trận tương quan Pearson giữa 25 đặc trưng số (gộp 4 mã)}
   \label{fig:tuongquan}
 \end{figure}
 
-\textit{Nhận xét:} \huongdan{Rút ra ít nhất 3 nhận xét có ý nghĩa cho việc
-xây dựng mô hình.}
+\textit{Nhận xét:}
+\begin{enumerate}
+  \item \textbf{Cụm đặc trưng xu hướng và vị thế giá:} Các đặc trưng đo khoảng cách
+    giữa giá đóng cửa và các đường trung bình động (\texttt{close\_sma5},
+    \texttt{close\_sma10}, \texttt{close\_sma20}, \texttt{close\_ema12},
+    \texttt{close\_ema26}) có hệ số tương quan thuận rất cao ($r > 0{,}80$). Đặc
+    biệt, \texttt{bb\_pctb} (vị trí tương đối trong dải Bollinger) có tương quan lên
+    tới $0{,}95$ với \texttt{close\_sma20} do cùng sử dụng trung bình động 20 phiên
+    làm trục cơ sở.
+  \item \textbf{Cụm đặc trưng độ biến động:} \texttt{volat\_5}, \texttt{volat\_20},
+    \texttt{hl\_range}, \texttt{bb\_width} và \texttt{atr14} tạo thành một nhóm có
+    tương quan dương rõ rệt ($r \in [0{,}55;\, 0{,}85]$), cùng phản ánh trạng thái
+    dao động mạnh hay hẹp của thị trường trong phiên.
+  \item \textbf{Tính độc lập của tín hiệu khối lượng:} Các đặc trưng liên quan đến
+    khối lượng (\texttt{vol\_ratio}, \texttt{vol\_chg}) có mức độ tương quan tuyến
+    tính rất thấp với các đặc trưng giá và biến động ($|r| < 0{,}15$), chứng minh
+    khối lượng mang lại nguồn thông tin bổ trợ trực giao, không bị trùng lặp với
+    hành động giá.
+  \item \textbf{Ý nghĩa với mô hình hóa:} Hiện tượng đa cộng tuyến giữa các chỉ báo
+    xu hướng đòi hỏi Hồi quy Logistic phải sử dụng chuẩn hóa $L_2$ (Ridge penalty)
+    để ổn định trọng số; trong khi các thuật toán cây như Rừng ngẫu nhiên và XGBoost
+    vốn có cơ chế chọn ngẫu nhiên tập con đặc trưng (feature subsampling) nên sẽ ít
+    bị tổn hại bởi hiện tượng này.
+\end{enumerate}
+
+\subsection{Phân bố các đặc trưng chính theo nhãn xu hướng}
+Hình~\ref{fig:featlabel} trình bày biểu đồ hộp (boxplot) của sáu đặc trưng đại diện
+cho ba nhóm (lợi suất, động lượng, biến động) phân theo ba lớp nhãn $-1$, $0$ và $1$.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{features_by_label.png}
+  \caption{Phân bố 6 đặc trưng đại diện theo ba lớp nhãn xu hướng (gộp 4 mã)}
+  \label{fig:featlabel}
+\end{figure}
+
+\textit{Nhận xét:}
+\begin{itemize}
+  \item \texttt{ret\_1} thể hiện sự dịch chuyển trung vị rõ nét nhất giữa các lớp:
+    phiên trước tăng thường đi kèm với xu hướng phân loại nhất định, tuy nhiên khoảng
+    tứ phân vị (IQR) giữa ba lớp vẫn chồng lấn đáng kể, khẳng định bài toán có độ
+    nhiễu cao và không thể phân loại bằng một ranh giới đơn biến tầm thường.
+  \item Chỉ báo động lượng \texttt{rsi14} và \texttt{macd\_hist} có phân bố lệch
+    nhẹ sang giá trị cao hơn ở lớp tăng ($1$) và thấp hơn ở lớp giảm ($-1$), thể hiện
+    tín hiệu động lượng có giá trị dự báo nhưng cần được kết hợp với các bộ lọc phụ trợ.
+  \item Các đặc trưng biến động (\texttt{volat\_20}) và khối lượng (\texttt{vol\_ratio})
+    có hình dạng phân phối tương đồng giữa ba nhãn; vai trò của chúng trong mô hình
+    không phải là yếu tố phân tách tuyến tính trực tiếp mà là các điều kiện kích hoạt
+    phi tuyến trong cây quyết định (ví dụ: chỉ báo RSI hiệu quả hơn trong môi trường
+    biến động thấp).
+\end{itemize}
 
 \section{Phát hiện và xử lý vấn đề chất lượng dữ liệu}
 \label{sec:chatluong}
@@ -1026,6 +1171,20 @@ hóa chỉ áp dụng cho Hồi quy Logistic bằng \texttt{StandardScaler}, đ�
 tập huấn luyện của từng fold rồi áp dụng cho khối kiểm tra của fold đó; Rừng ngẫu
 nhiên và XGBoost không cần chuẩn hóa. Dữ liệu không được xáo trộn mà chia theo thời
 gian bằng walk-forward như ở Mục~\ref{sec:quytrinh}.
+
+Hình~\ref{fig:walkforwardthucte} minh họa trực quan cấu trúc các fold kiểm định
+walk-forward thực tế được tạo ra cho mã CTG (27 fold). Cơ chế cửa sổ mở rộng
+(expanding window) giúp tập huấn luyện tích lũy dữ liệu lịch sử theo thời gian,
+khối kiểm tra 63 phiên liền kề không chồng lấn, và khoảng cách ly (purge) 1 phiên
+được duy trì nghiêm ngặt giữa tập huấn luyện và kiểm tra nhằm ngăn chặn việc nhãn
+phiên cuối của tập train sử dụng giá đóng cửa phiên đầu của tập test.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{walk_forward.png}
+  \caption{Minh họa các fold kiểm định walk-forward thực tế trên mã CTG (27 fold)}
+  \label{fig:walkforwardthucte}
+\end{figure}
 
 Sau khi bỏ 35 phiên khởi động (do chỉ báo dài nhất cần EMA26 rồi EMA9) và phiên cuối
 không có nhãn, mã tiền xử lý tạo ra kích thước dữ liệu thực tế ở
