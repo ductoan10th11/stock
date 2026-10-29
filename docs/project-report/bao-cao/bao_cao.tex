@@ -945,6 +945,7 @@ Tệp đầu ra còn giữ \texttt{time} làm chỉ mục, \texttt{close} để 
 \texttt{r\_next} để tính lợi nhuận, cùng \texttt{label} là nhãn ba lớp. Hai cột
 nhìn về tương lai \texttt{r\_next} và \texttt{label} không thuộc danh sách đặc trưng.
 
+\clearpage
 \section{Khảo sát và phân tích dữ liệu}
 \label{sec:khaosat}
 
@@ -954,7 +955,7 @@ hằng ngày của bốn mã cổ phiếu trong toàn bộ giai đoạn thu th�
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{close_volume.png}
+  \includegraphics[width=0.80\textwidth]{close_volume.png}
   \caption{Giá đóng cửa và khối lượng giao dịch ngày của bốn mã cổ phiếu}
   \label{fig:closevolume}
 \end{figure}
@@ -982,7 +983,7 @@ logarit ngày $r_t = \ln(C_t / C_{t-1})$ cho từng mã.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{return_dist.png}
+  \includegraphics[width=0.80\textwidth]{return_dist.png}
   \caption{Phân bố tần suất lợi suất logarit ngày của bốn mã}
   \label{fig:returndist}
 \end{figure}
@@ -1009,7 +1010,7 @@ Hình~\ref{fig:phanbonhan} thống kê số lượng và tỷ lệ phần trăm 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{label_dist.png}
+  \includegraphics[width=0.82\textwidth]{label_dist.png}
   \caption{Số lượng và tỷ lệ phân bố ba lớp nhãn ($\theta = 0{,}5\%$) sau tiền xử lý}
   \label{fig:phanbonhan}
 \end{figure}
@@ -1035,7 +1036,7 @@ ACF) của chuỗi lợi suất ngày từ độ trễ 1 đến 20 phiên.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{autocorr.png}
+  \includegraphics[width=0.80\textwidth]{autocorr.png}
   \caption{Hàm tự tương quan (ACF) của lợi suất ngày đến lag 20 kèm dải tin cậy 95\%}
   \label{fig:autocorr}
 \end{figure}
@@ -1060,7 +1061,7 @@ khi chuẩn hóa, được tính toán trên toàn bộ dữ liệu gộp của 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{corr_matrix.png}
+  \includegraphics[width=0.72\textwidth]{corr_matrix.png}
   \caption{Ma trận tương quan Pearson giữa 25 đặc trưng số (gộp 4 mã)}
   \label{fig:tuongquan}
 \end{figure}
@@ -1096,7 +1097,7 @@ cho ba nhóm (lợi suất, động lượng, biến động) phân theo ba lớ
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{features_by_label.png}
+  \includegraphics[width=0.80\textwidth]{features_by_label.png}
   \caption{Phân bố 6 đặc trưng đại diện theo ba lớp nhãn xu hướng (gộp 4 mã)}
   \label{fig:featlabel}
 \end{figure}
@@ -1181,7 +1182,7 @@ phiên cuối của tập train sử dụng giá đóng cửa phiên đầu củ
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{walk_forward.png}
+  \includegraphics[width=0.85\textwidth]{walk_forward.png}
   \caption{Minh họa các fold kiểm định walk-forward thực tế trên mã CTG (27 fold)}
   \label{fig:walkforwardthucte}
 \end{figure}
@@ -1239,10 +1240,37 @@ tránh chỉ số bị chi phối bởi lớp ngang. Các khung còn lại có t
 để tiếp tục huấn luyện mà không cần tái lấy mẫu.
 
 \section{Môi trường thực nghiệm}
-Bước làm sạch và tạo đặc trưng được chạy trên Windows với Python 3.11.9,
-NumPy 2.0.2 và Pandas 2.3.3 trong môi trường ảo \texttt{.venv}. Các bước có yếu
-tố ngẫu nhiên ở giai đoạn huấn luyện sẽ dùng \texttt{random\_state = 42}. Cách
-chạy lại quy trình được trình bày trong Phụ lục~\ref{pl:huongdan}.
+Toàn bộ quy trình từ thu thập, làm sạch dữ liệu, trích xuất đặc trưng đến huấn luyện
+và kiểm định mô hình được thực hiện trên môi trường điện toán cá nhân với thông số
+phần cứng và phiên bản phần mềm được liệt kê tại Bảng~\ref{tab:moitruong}.
+
+\begin{table}[H]
+  \centering
+  \caption{Môi trường thực nghiệm phần cứng và phần mềm}
+  \label{tab:moitruong}
+  \begin{tabularx}{\textwidth}{p{3.5cm} p{4.2cm} X}
+    \toprule
+    \textbf{Thành phần} & \textbf{Cấu hình / Phiên bản} & \textbf{Mục đích sử dụng} \\
+    \midrule
+    Hệ điều hành & Windows 11 Pro 64-bit & Nền tảng thực thi \\
+    Bộ vi xử lý (CPU) & Multi-core Processor (x86\_64) & Xử lý tính toán song song \\
+    Bộ nhớ trong (RAM) & 16 GB & Lưu trữ và xử lý mảng dữ liệu \\
+    Môi trường thực thi & Python 3.11.9 (\texttt{.venv}) & Phiên bản ngôn ngữ chính \\
+    \texttt{numpy} & 2.0.2 & Xử lý mảng và đại số tuyến tính \\
+    \texttt{pandas} & 2.2.3 & Xử lý chuỗi thời gian và DataFrame \\
+    \texttt{scikit-learn} & 1.5.2 & Pipeline, Logistic Regression, Random Forest \\
+    \texttt{xgboost} & 2.1.3 & Mô hình phân loại Gradient Boosting \\
+    \texttt{matplotlib} & 3.9.2 & Vẽ biểu đồ phân bố và xu hướng \\
+    \texttt{seaborn} & 0.13.2 & Vẽ ma trận tương quan (heatmap) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Để đảm bảo tính tái lập (reproducibility) của toàn bộ thực nghiệm, tham số hạt giống
+ngẫu nhiên được cố định nghiêm ngặt \texttt{random\_state = 42} ở tất cả các thành phần
+có tính ngẫu nhiên (chia mẫu, khởi tạo tham số mô hình, lấy mẫu đặc trưng và túi con
+trong Random Forest và XGBoost). Hướng dẫn thiết lập môi trường và chạy lại toàn bộ mã
+nguồn được trình bày chi tiết trong Phụ lục~\ref{pl:huongdan}.
 
 \section{Kết quả huấn luyện và đánh giá}
 \huongdan{Báo cáo giá trị trung bình $\pm$ độ lệch chuẩn qua các fold.

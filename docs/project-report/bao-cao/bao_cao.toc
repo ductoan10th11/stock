@@ -31,33 +31,33 @@
 \contentsline {section}{\numberline {3.1}Dữ liệu thực nghiệm}{14}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Nguồn dữ liệu}{14}{subsection.3.1.1}%
 \contentsline {subsection}{\numberline {3.1.2}Từ điển dữ liệu thô}{15}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Khảo sát và phân tích dữ liệu}{17}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Biến động giá và khối lượng theo thời gian}{17}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Phân bố lợi suất ngày}{18}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Phân bố nhãn xu hướng}{19}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.2}Khảo sát và phân tích dữ liệu}{18}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Biến động giá và khối lượng theo thời gian}{18}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Phân bố lợi suất ngày}{19}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Phân bố nhãn xu hướng}{20}{subsection.3.2.3}%
 \contentsline {subsection}{\numberline {3.2.4}Tự tương quan của chuỗi lợi suất}{20}{subsection.3.2.4}%
 \contentsline {subsection}{\numberline {3.2.5}Quan hệ tương quan giữa các đặc trưng}{21}{subsection.3.2.5}%
-\contentsline {subsection}{\numberline {3.2.6}Phân bố các đặc trưng chính theo nhãn xu hướng}{22}{subsection.3.2.6}%
-\contentsline {section}{\numberline {3.3}Phát hiện và xử lý vấn đề chất lượng dữ liệu}{23}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Chuẩn bị dữ liệu cho mô hình}{24}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Môi trường thực nghiệm}{26}{section.3.5}%
-\contentsline {section}{\numberline {3.6}Kết quả huấn luyện và đánh giá}{26}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Phân tích kết quả dự đoán}{27}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Tối ưu hóa và cải tiến mô hình}{27}{section.3.8}%
-\contentsline {subsection}{\numberline {3.8.1}Phân tích hạn chế của mô hình ban đầu}{27}{subsection.3.8.1}%
-\contentsline {subsection}{\numberline {3.8.2}Cải tiến dữ liệu và đặc trưng}{28}{subsection.3.8.2}%
-\contentsline {subsection}{\numberline {3.8.3}Thử nghiệm thuật toán hoặc cấu hình khác}{28}{subsection.3.8.3}%
-\contentsline {subsection}{\numberline {3.8.4}Tối ưu hóa siêu tham số}{28}{subsection.3.8.4}%
-\contentsline {section}{\numberline {3.9}So sánh trước và sau cải tiến}{28}{section.3.9}%
-\contentsline {section}{\numberline {3.10}Khả năng tổng quát hóa và lựa chọn mô hình cuối}{29}{section.3.10}%
-\contentsline {subsection}{\numberline {3.10.1}Khả năng tổng quát hóa}{29}{subsection.3.10.1}%
-\contentsline {subsection}{\numberline {3.10.2}Lựa chọn mô hình cuối cùng}{29}{subsection.3.10.2}%
-\contentsline {section}{\numberline {3.11}Kết luận chương 3}{29}{section.3.11}%
-\contentsline {chapter}{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}{31}{section*.37}%
-\contentsline {chapter}{TÀI LIỆU THAM KHẢO}{32}{chapter*.38}%
+\contentsline {subsection}{\numberline {3.2.6}Phân bố các đặc trưng chính theo nhãn xu hướng}{23}{subsection.3.2.6}%
+\contentsline {section}{\numberline {3.3}Phát hiện và xử lý vấn đề chất lượng dữ liệu}{24}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Chuẩn bị dữ liệu cho mô hình}{25}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Môi trường thực nghiệm}{27}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Kết quả huấn luyện và đánh giá}{28}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Phân tích kết quả dự đoán}{29}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Tối ưu hóa và cải tiến mô hình}{29}{section.3.8}%
+\contentsline {subsection}{\numberline {3.8.1}Phân tích hạn chế của mô hình ban đầu}{29}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.2}Cải tiến dữ liệu và đặc trưng}{30}{subsection.3.8.2}%
+\contentsline {subsection}{\numberline {3.8.3}Thử nghiệm thuật toán hoặc cấu hình khác}{30}{subsection.3.8.3}%
+\contentsline {subsection}{\numberline {3.8.4}Tối ưu hóa siêu tham số}{30}{subsection.3.8.4}%
+\contentsline {section}{\numberline {3.9}So sánh trước và sau cải tiến}{30}{section.3.9}%
+\contentsline {section}{\numberline {3.10}Khả năng tổng quát hóa và lựa chọn mô hình cuối}{31}{section.3.10}%
+\contentsline {subsection}{\numberline {3.10.1}Khả năng tổng quát hóa}{31}{subsection.3.10.1}%
+\contentsline {subsection}{\numberline {3.10.2}Lựa chọn mô hình cuối cùng}{31}{subsection.3.10.2}%
+\contentsline {section}{\numberline {3.11}Kết luận chương 3}{31}{section.3.11}%
+\contentsline {chapter}{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}{32}{section*.38}%
+\contentsline {chapter}{TÀI LIỆU THAM KHẢO}{33}{chapter*.39}%
 \renewcommand {\tocchapname }{Phụ lục}
-\contentsline {chapter}{\numberline {A}Hướng dẫn cài đặt và chạy chương trình}{34}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Yêu cầu môi trường}{34}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Các bước thực hiện}{34}{section.A.2}%
-\contentsline {chapter}{\numberline {B}Nhật ký đóng góp của các thành viên}{35}{appendix.B}%
+\contentsline {chapter}{\numberline {A}Hướng dẫn cài đặt và chạy chương trình}{35}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Yêu cầu môi trường}{35}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Các bước thực hiện}{35}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Nhật ký đóng góp của các thành viên}{36}{appendix.B}%
 \contentsfinish 

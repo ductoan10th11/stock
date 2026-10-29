@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.10.29)  29 OCT 2026 20:21
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.10.29)  29 OCT 2026 20:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1296,13 +1296,14 @@ Underfull \hbox (badness 3792) in paragraph at lines 922--923
  []
 
 ignored error: Infinite glue shrinkage found in box being split [15] [16]
+[17]
 File: images/close_volume.png Graphic file (type bmp)
 <images/close_volume.png>
+ [18
 
-[17]
+]
 File: images/return_dist.png Graphic file (type bmp)
 <images/return_dist.png>
- [18]
 File: images/label_dist.png Graphic file (type bmp)
 <images/label_dist.png>
  [19]
@@ -1311,84 +1312,100 @@ File: images/autocorr.png Graphic file (type bmp)
  [20]
 File: images/corr_matrix.png Graphic file (type bmp)
 <images/corr_matrix.png>
- [21]
+ [21] [22]
 File: images/features_by_label.png Graphic file (type bmp)
 <images/features_by_label.png>
- [22]
-Overfull \hbox (4.70175pt too wide) in alignment at lines 1126--1131
+
+Overfull \hbox (4.70175pt too wide) in alignment at lines 1127--1132
  [] [] [] 
  []
 
 
-Overfull \hbox (4.70175pt too wide) in alignment at lines 1131--1135
+Overfull \hbox (4.70175pt too wide) in alignment at lines 1132--1136
  [] [] [] 
  []
 
 
-Overfull \hbox (4.70175pt too wide) in alignment at lines 1135--1137
+Overfull \hbox (4.70175pt too wide) in alignment at lines 1136--1138
  [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1139--1139
+Underfull \hbox (badness 10000) in paragraph at lines 1140--1140
 []|\TU/TimesNewRoman(0)/m/n/13 Khối lượng
  []
 
 
-Underfull \hbox (badness 3884) in paragraph at lines 1140--1140
+Underfull \hbox (badness 3884) in paragraph at lines 1141--1141
 []|\TU/TimesNewRoman(0)/m/n/13 Bản ghi trùng
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1141--1141
+Underfull \hbox (badness 10000) in paragraph at lines 1142--1142
 \TU/TimesNewRoman(0)/m/n/13 (\TU/Consolas(0)/m/n/13 open\TU/TimesNewRoman(0)/m/
 n/13 /\TU/Consolas(0)/m/n/13 close
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1141--1141
+Underfull \hbox (badness 10000) in paragraph at lines 1142--1142
 \TU/TimesNewRoman(0)/m/n/13 ngoài
  []
 
 
-Underfull \hbox (badness 2556) in paragraph at lines 1142--1142
+Underfull \hbox (badness 2556) in paragraph at lines 1143--1143
 []|\TU/TimesNewRoman(0)/m/n/13 Biến động bất
  []
 
 
-Underfull \hbox (badness 4726) in paragraph at lines 1144--1144
+Underfull \hbox (badness 4726) in paragraph at lines 1145--1145
 []|\TU/TimesNewRoman(0)/m/n/13 Mất cân bằng
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1144--1144
+Underfull \hbox (badness 10000) in paragraph at lines 1145--1145
 \TU/TimesNewRoman(0)/m/n/13 lớp (giảm /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1144--1144
+Underfull \hbox (badness 10000) in paragraph at lines 1145--1145
 \TU/TimesNewRoman(0)/m/n/13 ngang / tăng,
  []
 
 
-Underfull \hbox (badness 1668) in paragraph at lines 1145--1145
+Underfull \hbox (badness 1668) in paragraph at lines 1146--1146
 []|\TU/TimesNewRoman(0)/m/n/13 Nguy cơ rò rỉ
  []
 
 
-Overfull \hbox (4.70175pt too wide) in alignment at lines 1137--1146
+Overfull \hbox (4.70175pt too wide) in alignment at lines 1138--1147
  [] [] [] 
  []
 
-ignored error: Infinite glue shrinkage found in box being split [23] [24]
+[23]
+ignored error: Infinite glue shrinkage found in box being split [24]
 File: images/walk_forward.png Graphic file (type bmp)
 <images/walk_forward.png>
+ [25]
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 1266--1266
+[]|\TU/TimesNewRoman(0)/m/n/13 Multi-core Processor
+ []
 
-[25] [26] [27] [28] [29] [30] [31
 
-] [32
+Underfull \hbox (badness 10000) in paragraph at lines 1266--1266
+[]|\TU/TimesNewRoman(0)/m/n/13 Bộ nhớ trong
+ []
 
-] [33]
+
+Underfull \hbox (badness 7362) in paragraph at lines 1266--1266
+[]|\TU/TimesNewRoman(0)/m/n/13 Môi trường thực
+ []
+
+[27] [28] [29] [30] [31] [32
+
+] [33
+
+] [34]
 Phụ lục A.
 (C:\Users\hieut\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
@@ -1396,11 +1413,11 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 (C:\Users\hieut\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
-[34
+[35
 
 ]
 Phụ lục B.
-[35
+[36
 
 ] (bao_cao.aux)
  ***********
@@ -1413,15 +1430,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
 Package rerunfilecheck Info: File `bao_cao.out' has not changed.
-(rerunfilecheck)             Checksum: 355B15FF588AEC4774C9DE83EEA664E8;15467.
+(rerunfilecheck)             Checksum: 127943A37292F8E14E4A3DC960BD5570;15467.
  ) 
 Here is how much of TeX's memory you used:
- 29471 strings out of 402987
- 578113 string characters out of 5448523
+ 29472 strings out of 402987
+ 578128 string characters out of 5448523
  1344335 words of memory out of 5000000
- 57695 multiletter control sequences out of 15000+600000
+ 57696 multiletter control sequences out of 15000+600000
  636873 words of font info for 125 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  84i,13n,103p,559b,1180s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on bao_cao.pdf (46 pages).
+Output written on bao_cao.pdf (47 pages).
