@@ -16,7 +16,7 @@ Tài liệu mô tả cách biến dữ liệu nến thô thành bộ đặc trư
 
 ## 1. Dữ liệu thô
 
-- **Nguồn:** API biểu đồ của DNSE (Entrade), cùng nguồn với trang `banggia.dnse.com.vn`. Script crawl dữ liệu là [crawl.py](../crawl.py).
+- **Nguồn:** API biểu đồ của DNSE (Entrade), cùng nguồn với trang `banggia.dnse.com.vn`. Script crawl dữ liệu là [scripts/crawl.py](../scripts/crawl.py).
 - **Vị trí:** `data/raw/1D/<MÃ>.csv`, gồm các cột `time, open, high, low, close, volume`.
 - **Đơn vị:** giá tính bằng nghìn đồng, volume tính bằng số cổ phiếu.
 - **Giá đã điều chỉnh:** giá có vẻ đã được điều chỉnh theo chia tách và cổ tức, vì không thấy bước nhảy bất thường vượt biên độ sàn.
@@ -46,10 +46,10 @@ Các lỗi đã kiểm tra trên dữ liệu thực tế và cách xử lý:
 | Biến động bất thường (vượt biên độ sàn) | ACB có 12 phiên >7.5% đến 06/2020, đều nằm trong biên ±10% của HNX | Giữ nguyên |
 | Nến chưa đóng | Nến ngày hiện tại khi crawl trong giờ giao dịch | Bỏ nến của ngày hiện tại nếu crawl trước 15:00 |
 
-Mã thực hiện là `clean_data.py`. Chạy từ thư mục gốc dự án:
+Mã thực hiện là `scripts/clean_data.py`. Chạy từ thư mục gốc dự án:
 
 ```bash
-python clean_data.py
+python scripts/clean_data.py
 ```
 
 Dữ liệu thô không bị ghi đè. Script xử lý cả sáu khung `1`, `5`, `15`, `30`,
@@ -68,6 +68,10 @@ dữ liệu nội ngày được giữ ở dạng `YYYY-MM-DD HH:MM`; dữ liệ
 | 1H | 4 | 9.931 | 9.931 | 0 | 0 |
 | 1D | 4 | 9.580 | 9.576 | 4 | 3 |
 
+Khung 30 phút không lấy trực tiếp từ dữ liệu thô: các nến 30 phút buổi sáng (09:00–11:00) của API chỉ chứa khoảng 0,5% khối lượng thật (tổng khối lượng cả ngày chỉ bằng ~60% khung 1D). Script gộp từ khung 5 phút (nhãn nến giữ theo quy ước 09:00, 09:30, ...), và tổng khối lượng sau đó khớp khung 1D (sai lệch dưới 0,4%).
+
+Hai chỗ thiếu phiên do nguồn, không có dữ liệu bổ sung nên giữ nguyên: CTG và VNM thiếu 2018-01-23 và 2018-01-24; ACB thiếu 2020-12-02 đến 2020-12-08. Lợi suất qua các khoảng này được tính như một phiên.
+
 Chi tiết kết quả khung 1D:
 
 | Mã | Số dòng trước | Gộp dòng trùng | Sửa OHLC | Số dòng sau |
@@ -79,11 +83,11 @@ Chi tiết kết quả khung 1D:
 
 ### Bộ dữ liệu riêng theo `SKILLFILTER.md`
 
-`filter_data.py` tạo một bộ dữ liệu nhị phân riêng theo hướng dẫn lọc cổ phiếu
+`scripts/filter_data.py` tạo một bộ dữ liệu nhị phân riêng theo hướng dẫn lọc cổ phiếu
 ngân hàng:
 
 ```bash
-python filter_data.py
+python scripts/filter_data.py
 ```
 
 Kết quả được lưu tại `data/filtered/bank_stocks_clean.csv`, kèm báo cáo
@@ -203,10 +207,10 @@ fold 3: [============ train 876 ============][test 63]
 data/processed/<KHUNG>/<MÃ>.csv
 ```
 
-Mã tạo đặc trưng và nhãn là `preprocess_data.py`. Chạy sau bước làm sạch:
+Mã tạo đặc trưng và nhãn là `scripts/preprocess_data.py`. Chạy sau bước làm sạch:
 
 ```bash
-python preprocess_data.py
+python scripts/preprocess_data.py
 ```
 
 Script xử lý cả sáu khung `1`, `5`, `15`, `30`, `1H`, `1D`. Báo cáo tổng hợp
@@ -218,7 +222,7 @@ một `preprocessing_summary.csv` riêng.
 | 1 | 0.05% | 30 | 56.377 | 21.6/57.4/21.0% | 9.000 | 1.125 | 4 |
 | 5 | 0.10% | 30 | 11.448 | 30.8/41.3/28.0% | 1.800 | 225 | 4 |
 | 15 | 0.15% | 30 | 3.888 | 37.5/30.4/32.1% | 640 | 80 | 4 |
-| 30 | 0.15% | 30 | 2.124 | 41.6/23.8/34.7% | 315 | 45 | 4 |
+| 30 | 0.15% | 30 | 2.124 | 41.5/23.8/34.7% | 315 | 45 | 4 |
 | 1H | 0.20% | 30 | 9.787 | 33.6/37.9/28.5% | 1.000 | 125 | 11 |
 | 1D | 0.50% | 25 | 9.432 | 33.4/32.4/34.2% | 750 | 63 | 20--27 |
 
@@ -288,7 +292,7 @@ fold; riêng 1H có 11 fold và 1D có 20--27 fold.
 
 - [x] Đặc trưng tại `t` chỉ dùng dữ liệu đến hết phiên `t`. Không có `shift(-k)` nào trong phần tạo đặc trưng.
 - [x] Nhãn và `r_next` là hai cột duy nhất nhìn về tương lai, và cả hai không nằm trong `X`.
-- [ ] Mọi phép chia đều theo thời gian. Không xáo trộn dữ liệu, không dùng `train_test_split` ngẫu nhiên.
-- [ ] Scaler, lọc đặc trưng và siêu tham số chỉ được fit hoặc chọn trên tập train của từng fold.
+- [x] Mọi phép chia đều theo thời gian. Không xáo trộn dữ liệu, không dùng `train_test_split` ngẫu nhiên.
+- [x] Scaler, lọc đặc trưng và siêu tham số chỉ được fit hoặc chọn trên tập train của từng fold.
 - [x] Cấu hình mọi khung có purge 1 nến giữa train và test.
 - [x] Bỏ nến chưa đóng của ngày hiện tại.

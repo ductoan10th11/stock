@@ -1,5 +1,7 @@
 """Clean every OHLCV resolution without modifying the raw data."""
 
+from __future__ import annotations
+
 import argparse
 from datetime import datetime, time, timedelta
 from pathlib import Path
@@ -16,7 +18,7 @@ PRICE_COLUMNS = ("open", "high", "low", "close")
 NUMERIC_COLUMNS = (*PRICE_COLUMNS, "volume")
 MARKET_TIMEZONE = ZoneInfo("Asia/Ho_Chi_Minh")
 MARKET_CLOSE = time(15, 0)
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def incomplete_candle_mask(
@@ -124,6 +126,24 @@ def clean_ohlcv_data(
     return cleaned, summary
 
 
+def rebuild_30m_from_5m(raw_5m: pd.DataFrame) -> pd.DataFrame:
+    # Raw 30m morning bars from the API carry ~0.5% of the real volume; 5m bars reconcile with 1D.
+    cleaned_5m, _ = clean_ohlcv_data(raw_5m, "5")
+    cleaned_5m["time"] = pd.to_datetime(cleaned_5m["time"])
+    return (
+        cleaned_5m.resample("30min", on="time")
+        .agg(
+            open=("open", "first"),
+            high=("high", "max"),
+            low=("low", "min"),
+            close=("close", "last"),
+            volume=("volume", "sum"),
+        )
+        .dropna()
+        .reset_index()
+    )
+
+
 def clean_daily_data(
     data: pd.DataFrame,
     now: datetime | None = None,
@@ -150,7 +170,10 @@ def clean_files(
             if not input_path.is_file():
                 raise FileNotFoundError(f"Input file not found: {input_path}")
 
-            cleaned, summary = clean_ohlcv_data(pd.read_csv(input_path), resolution)
+            raw = pd.read_csv(input_path)
+            if resolution == "30":
+                raw = rebuild_30m_from_5m(pd.read_csv(input_root / "5" / input_path.name))
+            cleaned, summary = clean_ohlcv_data(raw, resolution)
             cleaned.to_csv(output_dir / input_path.name, index=False)
             row = {"resolution": resolution, "symbol": symbol, **summary}
             summaries.append(row)

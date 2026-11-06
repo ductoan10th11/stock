@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 SYMBOLS = ("TCB", "CTG", "VNM", "ACB")
 RESOLUTIONS = ("1", "5", "15", "30", "1H", "1D")
 WARMUP_ROWS = 35

@@ -17,7 +17,7 @@ URL = (
     "https://services.entrade.com.vn/chart-api/v2/ohlcs/stock"
     "?from={f}&to={t}&symbol={s}&resolution={r}"
 )
-OUT = Path(__file__).parent / "data" / "raw"
+OUT = Path(__file__).resolve().parent.parent / "data" / "raw"
 VN = timezone(timedelta(hours=7))
 
 

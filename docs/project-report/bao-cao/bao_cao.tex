@@ -645,7 +645,7 @@ Dữ liệu nến ngày (OHLCV) của bốn mã TCB, CTG, VNM, ACB được thu 
 biểu đồ của DNSE (Entrade), cùng nguồn với bảng giá trực tuyến
 \url{https://banggia.dnse.com.vn/v2?symbol=TCB} (tương tự với các mã còn lại).
 Dữ liệu là giá giao dịch công khai trên sàn, được thu thập bằng mã
-\texttt{crawl.py} của nhóm vào ngày 23/10/2026 và lưu thành các tệp
+\texttt{scripts/crawl.py} của nhóm vào ngày 23/10/2026 và lưu thành các tệp
 \texttt{data/raw/1D/<MÃ>.csv}. Giá tính bằng nghìn đồng, khối lượng tính bằng số
 cổ phiếu; giá có vẻ đã được điều chỉnh theo chia tách và cổ tức vì không thấy
 bước nhảy bất thường vượt biên độ sàn.
@@ -1300,8 +1300,8 @@ khung nến rồi tạo tập đặc trưng và nhãn cho khung 1D bằng các l
 \begin{lstlisting}[language=bash,numbers=none]
 python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements.txt
-.venv/Scripts/python clean_data.py
-.venv/Scripts/python preprocess_data.py
+.venv/Scripts/python scripts/clean_data.py
+.venv/Scripts/python scripts/preprocess_data.py
 \end{lstlisting}
 
 Các tệp trung gian được ghi vào \texttt{data/cleaned/<KHUNG>/}; tập sẵn sàng
