@@ -11,11 +11,15 @@ Bài tiểu luận học phần Học máy (nhóm 16): dự đoán xu hướng t
 ## Cấu trúc repo
 
 ```
-scripts/                  crawl.py (thu thập), clean_data.py, preprocess_data.py, filter_data.py, train_models.py, analyze_results.py
+scripts/                  crawl.py (thu thập), clean_data.py, preprocess_data.py, filter_data.py, train_models.py, analyze_results.py, tune_models.py, select_final_model.py, screen_symbols.py, hourly_ablation.py, panel_data.py, panel_experiments.py, summarize_research.py
 scripts/crawl.py         thu thập nến từ API DNSE (Entrade), ghi vào data/raw/<khung>/<mã>.csv
 data/raw/<khung>/        dữ liệu thô, các cột time, open, high, low, close, volume
 data/processed/1D/       dữ liệu đã tiền xử lý (đặc trưng, r_next, label)
 results/<khung>/         kết quả walk-forward: fold_metrics, predictions, backtest, summary (train_models.py)
+data/extra/            dữ liệu thí nghiệm mở rộng: 15 mã bổ sung (cleaned, processed) và panel_1D.csv.gz (sinh lại bằng panel_data.py)
+data/screening/        chấm điểm chất lượng dữ liệu các mã ứng viên (screen_symbols.py)
+results/extra/         kết quả thí nghiệm mở rộng (15 mã, khung 1D và 1H)
+results/research/      kết quả mô hình gộp nhiều mã: metrics.csv từng cấu hình, summary.csv (panel_experiments.py)
 notebooks/               EDA và thực nghiệm
 docs/                    tài liệu thiết kế
 docs/project-report/

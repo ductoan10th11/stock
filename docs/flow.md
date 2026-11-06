@@ -10,7 +10,7 @@ Trạng thái: **xong**, **một phần**, **chưa làm**. Cập nhật cột n�
 |---|---|---|
 | 1. Nghiên cứu chuỗi giá, chỉ báo kỹ thuật, phát biểu bài toán phân loại | B1 | Xong (Chương 1, 2 của báo cáo) |
 | 2. Thu thập dữ liệu, tính chỉ báo làm đặc trưng | B2 đến B5 | Xong |
-| 3. Huấn luyện Logistic Regression, Random Forest, XGBoost bằng walk-forward; so sánh với mua và nắm giữ, dự đoán ngẫu nhiên | B6, B8, B9 | Mô hình ban đầu xong; tinh chỉnh chưa làm |
+| 3. Huấn luyện Logistic Regression, Random Forest, XGBoost bằng walk-forward; so sánh với mua và nắm giữ, dự đoán ngẫu nhiên | B6, B8, B9 | Mô hình ban đầu, tinh chỉnh và chọn mô hình cuối xong |
 | 4. Đánh giá bằng Accuracy, F1, ROC-AUC và backtest; thảo luận giới hạn dự đoán giá và quá khớp | B6, B7, B10, B11 | Chỉ số, backtest và phân tích quá khớp xong; thảo luận chưa làm |
 
 ## Điểm khác so với đề bài
@@ -78,14 +78,17 @@ Mỗi thay đổi đo trên cùng dữ liệu, cùng walk-forward, cùng chỉ s
 3. Tinh chỉnh siêu tham số: trong mỗi fold, lấy 20% cuối của train làm validation, chọn siêu tham số trên phần này rồi huấn luyện lại trên toàn bộ train của fold. Không dùng khối test để chọn bất cứ thứ gì.
 4. Tùy chọn: SVM, hoặc Voting/Stacking.
 
+- Chạy: `python scripts/tune_models.py` (năm biến thể: 12 hoặc 25 đặc trưng, `class_weight`, tinh chỉnh trong từng fold).
+- Đầu ra: `results/1D/tuning/{fold_metrics,predictions,backtest,best_params,summary}.csv`; số liệu và nhận xét ở [train.md](train.md), mục 10.
 - Báo cáo: mục 3.8 và 3.9 (bảng `tab:sieuthamso`, `tab:ablation`, hình `fig:sosanhmohinh`).
-- Trạng thái: chưa làm.
+- Trạng thái: một phần. Ablation, `class_weight` và tinh chỉnh xong; kết quả: nhóm bổ trợ có ích, `class_weight` chỉ cải thiện nhỏ, tinh chỉnh không tăng F1 test. SVM, Voting/Stacking và lọc đặc trưng tương quan chưa làm.
 
 ### B9. Chọn mô hình cuối và đánh giá tổng quát hóa
 
 Chọn dựa trên đánh đổi giữa F1, độ ổn định giữa các fold, thời gian chạy và khả năng diễn giải. Khối test của walk-forward là tập kiểm tra giữ lại; chỉ báo cáo một lần sau khi đã chốt cấu hình. Báo cáo cả kết quả không tốt, không chỉ báo lần chạy tốt nhất.
-- Báo cáo: mục 3.10.
-- Trạng thái: chưa làm.
+- Chạy: `python scripts/select_final_model.py` (đọc `results/1D/tuning/` và `results/1D/`, ghi `results/1D/final/`).
+- Báo cáo: mục 3.10. Số liệu và nhận xét ở [train.md](train.md), mục 11.
+- Trạng thái: xong. Chốt Random Forest, 25 đặc trưng, siêu tham số mặc định. Random Forest và XGBoost hòa về F1 (chênh +0,002, khoảng tin cậy chứa 0), chọn theo ROC-AUC và độ ổn định. F1 macro hơn ngẫu nhiên 0,022 [0,011; 0,033], không đồng đều giữa các mã và yếu dần sau 2020. Sau B14 mô hình chính đổi sang `ensemble3` gộp mã (train.md mục 15).
 
 ### B10. Backtest và so sánh với baseline (nhiệm vụ 3, 4)
 
@@ -112,6 +115,13 @@ Chạy `python scripts/train_models.py --resolution 1H` hoặc khung phút. Khun
 4. Biên dịch: `cd docs/project-report/bao-cao && latexmk bao_cao.tex`.
 5. Slide và phần triển khai cloud (theo phân công).
 - Trạng thái: chưa làm.
+
+### B14. Hướng cải thiện mô hình: gộp nhiều mã, nhãn tương đối (thí nghiệm sau B9)
+
+Thử các hướng gộp mã, nhãn tương đối so với thị trường, mô hình biến động hai giai đoạn, ensemble, VN-Index và chân trời 3 đến 20 ngày trên panel 19 mã, so sánh trên các fold đến hết 2024 và xác nhận trên các fold từ 2025.
+- Chạy: `python scripts/panel_data.py --verify`, `python scripts/panel_experiments.py --name <tên> --mode pooled --label rel --features full`, `python scripts/summarize_research.py`.
+- Đầu ra: `results/research/`; số liệu và nhận xét ở [train.md](train.md), mục 14.
+- Trạng thái: xong phần thử nghiệm. Hướng tốt nhất: mô hình gộp nhiều mã, đặc trưng đầy đủ không kèm VN-Index (nhãn tuyệt đối và tương đối gần tương đương sau khi xác nhận). Tín hiệu xếp hạng được xác nhận ngoài mẫu, nhưng alpha ròng sau phí chưa khác 0 có ý nghĩa. Đã chọn `ensemble3` gộp 19 mã, khung ngày làm mô hình chính ([train.md](train.md), mục 15). Chưa đưa vào báo cáo; quyết định này khác "mỗi mã một mô hình riêng" trong `AGENTS.md` và `data-preprocess.md` nên cần nhóm đồng ý trước khi sửa các tài liệu đó.
 
 ## Quyết định cần chốt
 

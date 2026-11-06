@@ -1,0 +1,2 @@
+config,model,ic_raw,ic_demeaned
+pooled_abs_base,xgboost,0.10503292655134525,0.1038881429261906

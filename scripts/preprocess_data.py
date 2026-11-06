@@ -46,6 +46,8 @@ BASE_FEATURE_COLUMNS = (
     "vol_chg",
     "atr14",
 )
+# The first twelve base features are the indicators the assignment requires.
+CORE_FEATURE_COLUMNS = BASE_FEATURE_COLUMNS[:12]
 TIME_FEATURE_COLUMNS = (
     "time_sin",
     "time_cos",

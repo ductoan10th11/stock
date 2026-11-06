@@ -3,6 +3,7 @@
 Mỗi khung nến lấy tối đa độ sâu API cho phép (1D từ 2018, 1H ~2 năm, phút ~3 tháng).
 Kết quả: data/raw/<khung>/<mã>.csv
 """
+import argparse
 import csv
 import json
 import time
@@ -14,16 +15,16 @@ SYMBOLS = ["TCB", "CTG", "VNM", "ACB"]
 # khung nến -> số ngày lùi lại (vượt độ sâu tối đa thì API tự cắt)
 RESOLUTIONS = {"1D": 3650, "1H": 730, "30": 365, "15": 365, "5": 365, "1": 365}
 URL = (
-    "https://services.entrade.com.vn/chart-api/v2/ohlcs/stock"
+    "https://services.entrade.com.vn/chart-api/v2/ohlcs/{k}"
     "?from={f}&to={t}&symbol={s}&resolution={r}"
 )
 OUT = Path(__file__).resolve().parent.parent / "data" / "raw"
 VN = timezone(timedelta(hours=7))
 
 
-def fetch(symbol, resolution, start, end):
+def fetch(symbol, resolution, start, end, kind="stock"):
     url = URL.format(
-        f=int(start.timestamp()), t=int(end.timestamp()), s=symbol, r=resolution
+        k=kind, f=int(start.timestamp()), t=int(end.timestamp()), s=symbol, r=resolution
     )
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     for attempt in range(5):
@@ -43,13 +44,24 @@ def fetch(symbol, resolution, start, end):
     return rows
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--symbols", nargs="+", default=SYMBOLS)
+    parser.add_argument("--resolutions", nargs="+", default=list(RESOLUTIONS), choices=list(RESOLUTIONS))
+    parser.add_argument("--output-root", type=Path, default=OUT)
+    parser.add_argument("--kind", default="stock", choices=["stock", "index"])
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     end = datetime.now(VN)
-    for res, days in RESOLUTIONS.items():
-        folder = OUT / res
+    for res in args.resolutions:
+        days = RESOLUTIONS[res]
+        folder = args.output_root / res
         folder.mkdir(parents=True, exist_ok=True)
-        for s in SYMBOLS:
-            rows = fetch(s, res, end - timedelta(days=days), end)
+        for s in args.symbols:
+            rows = fetch(s, res, end - timedelta(days=days), end, args.kind)
             with open(folder / f"{s}.csv", "w", newline="") as f:
                 w = csv.writer(f)
                 w.writerow(["time", "open", "high", "low", "close", "volume"])

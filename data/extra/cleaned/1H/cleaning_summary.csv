@@ -1,0 +1,16 @@
+resolution,symbol,rows_before,missing_rows_removed,invalid_price_rows_removed,invalid_volume_rows_removed,duplicate_rows_merged,ohlc_rows_corrected,incomplete_rows_removed,rows_after
+1H,HPG,2481,0,0,0,0,0,0,2481
+1H,FPT,2482,0,0,0,0,0,0,2482
+1H,SSI,2482,0,0,0,0,0,0,2482
+1H,MWG,2482,0,0,0,0,0,0,2482
+1H,STB,2482,0,0,0,0,0,0,2482
+1H,MSN,2482,0,0,0,0,0,0,2482
+1H,MBB,2482,0,0,0,0,0,0,2482
+1H,VCB,2481,0,0,0,0,0,0,2481
+1H,VJC,2482,0,0,0,0,0,0,2482
+1H,BID,2480,0,0,0,0,0,0,2480
+1H,DPM,2480,0,0,0,0,0,0,2480
+1H,PVD,2481,0,0,0,0,0,0,2481
+1H,GAS,2482,0,0,0,0,0,0,2482
+1H,PNJ,2480,0,0,0,0,0,0,2480
+1H,REE,2482,0,0,0,0,0,0,2482
