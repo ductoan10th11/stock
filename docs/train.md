@@ -63,7 +63,7 @@ Các tham số mặc định của Random Forest (cây không giới hạn độ
   - Dự đoán tăng thì mua hoặc giữ, dự đoán giảm thì bán và đứng ngoài, dự đoán ngang thì giữ nguyên trạng thái.
   - Quyết định cuối phiên `t` ăn lợi suất log `r_next` của phiên `t+1`.
   - Phí 0,15% mỗi chiều, thuế 0,1% khi bán. Vị thế còn mở ở cuối giai đoạn được đóng và tính phí bán.
-  - Sharpe tính từ lợi suất ngày, nhân căn 252, không trừ lãi suất phi rủi ro.
+  - Sharpe tính từ lợi suất mỗi kỳ (ngày, hoặc nến với khung nhỏ hơn ngày), nhân căn số kỳ mỗi năm (252 nhân số nến mỗi phiên), không trừ lãi suất phi rủi ro.
   - Mua và nắm giữ trả phí một lần mua và một lần bán. Dự đoán ngẫu nhiên lấy trung bình lợi nhuận của 100 lần rút.
 
 ## 5. Kết quả
@@ -162,7 +162,7 @@ Ghi lại các phát hiện khi kiểm tra dữ liệu trước khi huấn luy�
 
 ## 8. Chưa làm
 
-Xem B10 đến B13 trong [flow.md](flow.md): backtest cấu hình cuối, thảo luận giới hạn, điền số liệu vào báo cáo. Phần còn thiếu của B8 (SVM, Voting/Stacking, lọc đặc trưng tương quan) ghi ở mục 10.5.
+Xem B13 trong [flow.md](flow.md): điền số liệu vào báo cáo, khai báo dùng AI tạo sinh, slide. B10 (mục 16), B11 (mục 17) và B12 (mục 18) đã xong. Phần còn thiếu của B8 (SVM, Voting/Stacking, lọc đặc trưng tương quan) ghi ở mục 10.5.
 
 ## 9. Phân tích kết quả (B7)
 
@@ -554,7 +554,7 @@ Cùng quy tắc long-only và chi phí như mục 4 (phí 0,15% mỗi chiều, t
 | HPG | -19,3% | -52,5% (223 lệnh mua) | -52,4% (208) | -57,3% (210) | -62,5% (224) |
 | FPT | -36,4% | -20,9% (78) | -33,4% (132) | -44,3% (188) | -65,3% (211) |
 
-Cột Sharpe trong `results/extra/1H/backtest.csv` nhân với căn của 252 (số phiên mỗi năm), nhưng đơn vị ở đây là một nến giờ (khoảng 5 nến mỗi phiên), nên giá trị Sharpe của khung này không đúng thang và không nên đưa vào báo cáo cho đến khi sửa.
+Cột Sharpe của `results/extra/1H/backtest.csv` ban đầu nhân với căn của 252 trong khi đơn vị là một nến giờ (khoảng 5 nến mỗi phiên), nên sai thang. Đã sửa trong `train_models.py` (số kỳ mỗi năm = 252 nhân số nến mỗi phiên, xem mục 18.1) và chạy lại: tổng lợi suất và số lệnh không đổi, chỉ cột Sharpe đổi (nhân khoảng căn 5, cùng dấu).
 
 ### 13.6 Nhận xét
 
@@ -568,7 +568,9 @@ Cột Sharpe trong `results/extra/1H/backtest.csv` nhân với căn của 252 (s
 
 ## 14. Thử các hướng cải thiện: mô hình gộp, nhãn tương đối, biến động, ensemble, VN-Index (sau B9)
 
-Mục đích: tìm hướng tốt nhất sau khi các mục 9 đến 13 cho thấy dự đoán theo từng mã gần như không hơn ngẫu nhiên. Đây là thí nghiệm bổ sung, không thay phạm vi chính (bốn mã, mô hình riêng từng mã, mục 2).
+Mục đích: tìm hướng tốt nhất sau khi các mục 9 đến 13 cho thấy dự đoán theo từng mã gần như không hơn ngẫu nhiên. Ban đầu đây là thí nghiệm bổ sung bên cạnh phạm vi chính (bốn mã, mô hình riêng từng mã, mục 2); sau khi so sánh, hướng gộp mã được nhóm chọn làm mô hình chính (mục 15.3) và chạy riêng từng mã còn là baseline.
+
+Thuật ngữ: "gộp mã" (pooled) là huấn luyện một mô hình trên dữ liệu nhiều mã; "ensemble" là trung bình xác suất của nhiều mô hình. Hai khái niệm độc lập nhau.
 
 ### 14.1 Thiết lập
 
@@ -701,11 +703,11 @@ Nhận xét:
 
 ## 15. So sánh hai mô hình ứng viên và quyết định chọn mô hình chính
 
-So sánh `ensemble3` gộp 19 mã khung ngày (mục 14.8) với Logistic giá + thời gian khung 1H (mục 13.3). Số liệu lấy từ các mục đó, không chạy lại. Hai bài toán khác nhau (ngưỡng nhãn 0,5% so với 0,2%, 19 mã và 10 năm so với 15 mã và 2 năm, 26 fold so với 165 fold gộp theo mã), nên so sánh chỉ mang tính tương đối.
+So sánh `ensemble3` huấn luyện trên dữ liệu gộp 19 mã, khung ngày (mục 14.8) với Logistic giá + thời gian khung 1H (mục 13.3). Số liệu lấy từ các mục đó, không chạy lại. Hai bài toán khác nhau (ngưỡng nhãn 0,5% so với 0,2%, 19 mã và 10 năm so với 15 mã và 2 năm, 26 fold so với 165 fold gộp theo mã), nên so sánh chỉ mang tính tương đối.
 
 ### 15.1 Bảng so sánh
 
-| | Logistic 1H (25 giá + 5 giờ) | `ensemble3` khung ngày, gộp 19 mã |
+| | Logistic 1H (25 giá + 5 giờ) | `ensemble3`, huấn luyện gộp 19 mã, khung ngày |
 |---|---|---|
 | F1 macro | 0,416 | 0,380 (dev), 0,401 (xác nhận) |
 | ROC-AUC (OvR macro) | 0,610 | 0,580 (dev), 0,590 (xác nhận) |
@@ -727,7 +729,7 @@ So sánh `ensemble3` gộp 19 mã khung ngày (mục 14.8) với Logistic giá +
 
 ### 15.3 Quyết định
 
-**Mô hình chính của báo cáo: `ensemble3` gộp 19 mã, khung ngày, 53 đặc trưng, nhãn tuyệt đối ba lớp.** Lý do:
+**Mô hình chính của báo cáo: gộp 19 mã (pooled) + `ensemble3`, khung ngày, 53 đặc trưng, nhãn tuyệt đối ba lớp.** Hai phần này độc lập: gộp mã là cách chia dữ liệu huấn luyện (một mô hình chung cho 19 mã); `ensemble3` là cách kết hợp mô hình (trung bình xác suất Logistic, Random Forest, XGBoost). Đóng góp rất khác nhau: gộp mã là đòn bẩy chính (IC xếp hạng khoảng 0,05 lên 0,105; AUC khoảng 0,53 lên 0,565), còn `ensemble3` gần như không hơn XGBoost đơn về điểm số và được chọn chủ yếu vì ổn định giữa các fold. Lý do chọn:
 1. Đề bài ghi nến 1 ngày; khung ngày là phạm vi chính, 1H là thí nghiệm mở rộng.
 2. Tín hiệu được xác nhận ngoài mẫu và hơn baseline tầm thường một cách rõ ràng, trong khi điểm cao của 1H chủ yếu là hiệu ứng giờ.
 3. Số liệu trên 10 năm và 26 fold chắc hơn 2 năm và 11 fold mỗi mã.
@@ -735,5 +737,248 @@ So sánh `ensemble3` gộp 19 mã khung ngày (mục 14.8) với Logistic giá +
 Phương án thay thế gần ngang: XGBoost đơn lẻ (cùng cấu hình, F1 0,378, AUC 0,576), nếu muốn một mô hình duy nhất cho gọn. Logistic 1H giữ làm thí nghiệm mở rộng, và khi đưa vào báo cáo phải nêu kèm baseline `hour_prior`.
 
 Điều kiện đi kèm quyết định:
-- Quyết định này khác với "mỗi mã một mô hình riêng" trong `AGENTS.md` và `data-preprocess.md` (và với kết luận Random Forest riêng từng mã ở mục 11). Cần nhóm đồng ý trước khi sửa các tài liệu đó; hiện tại chúng chưa được sửa.
+- Quyết định này khác "mỗi mã một mô hình riêng" ban đầu và kết luận Random Forest riêng từng mã ở mục 11. Nhóm đã đồng ý đổi; `AGENTS.md`, `data-preprocess.md` và `flow.md` đã sửa theo. Mục 11 giữ nguyên như kết quả của baseline từng mã.
 - Không nêu `ensemble3` là "tốt hơn rõ" mô hình đơn lẻ, và không nêu lợi nhuận: alpha ròng sau phí chưa khác 0 có ý nghĩa, và quy tắc T+2 chưa được mô hình hóa (mục 14.7).
+
+## 16. Backtest cuối của mô hình chính (B10)
+
+Mô hình: gộp 19 mã + `ensemble3`, nhãn tuyệt đối, 53 đặc trưng (mục 15.3). Điểm của mỗi mã mỗi ngày là `p_up - p_down` ngoài mẫu từ walk-forward (26 fold). Lệnh: `python scripts/panel_data.py`, `python scripts/panel_experiments.py --name pooled_abs_full --mode pooled --label abs --features full`, rồi `python scripts/final_backtest.py`. Kết quả sinh lại giống hệt lần chạy trước (chênh 0,0 ở F1, AUC, IC, alpha). Đầu ra ở `results/research/final_backtest/` (`strategies.csv`, `random_baseline.csv`, `buy_and_hold.csv`).
+
+### 16.1 Cách chạy backtest
+
+- **Danh mục:** mỗi ngày mua nhóm 20% mã có điểm cao nhất (tối thiểu 3 mã), tỷ trọng bằng nhau, giữ đến phiên kế tiếp. Giá vào và ra là giá đóng cửa.
+- **Chi phí (hệ số phí 1,0):** mua 0,15%, bán 0,25% (gồm thuế 0,1%). Phân tích nhạy cảm nhân phí với 0, 0,5, 1 và 2.
+- **Hai cách giao dịch:** `daily` (chọn lại mỗi ngày) và `sticky` (giữ mã đang nắm cho đến khi hạng tụt quá 2 lần ngưỡng chọn), dùng để giảm số lần giao dịch.
+- **Chuẩn so sánh:** danh mục 19 mã tỷ trọng bằng nhau, cân bằng lại mỗi ngày, không tính phí (alpha và beta tính so với chuẩn này); mua và nắm giữ từng mã; 200 danh mục chọn mã ngẫu nhiên cùng quy tắc (`random_state = 42`).
+- **Chỉ số:** lợi suất năm hóa (trung bình ngày nhân 252), Sharpe, sụt giảm tối đa, alpha và beta theo hồi quy so với chuẩn, khoảng tin cậy 95% bootstrap theo khối (khối 10, 2.000 lần).
+- **Giai đoạn:** dev (20 fold, 1.260 phiên) và xác nhận (6 fold từ 2025-01-01, 378 phiên).
+
+### 16.2 Kết quả chính (hệ số phí 1,0, tức phí thực tế)
+
+| Chiến lược | Giai đoạn | Lợi suất năm | Sharpe | Sụt giảm tối đa | Alpha năm [khoảng tin cậy 95%] | Beta | Mua mỗi ngày |
+|---|---|---|---|---|---|---|---|
+| Chuẩn: 19 mã tỷ trọng bằng nhau | dev | 22,8% | 0,99 | −34,7% | – | 1,00 | – |
+| | xác nhận | 12,6% | 0,58 | −21,5% | – | 1,00 | – |
+| `ensemble3` chọn lại mỗi ngày | dev | 7,6% | 0,26 | −37,4% | −17,8% [−28,5; −6,5] | 1,11 | 64% |
+| | xác nhận | 11,2% | 0,41 | −34,7% | −1,9% [−24,5; +20,9] | 1,04 | 63% |
+| `ensemble3` giữ vị thế (sticky) | dev | 25,3% | 0,87 | −37,9% | 0,0% [−11,5; +11,9] | 1,11 | 40% |
+| | xác nhận | 22,3% | 0,80 | −37,8% | +9,1% [−17,9; +37,0] | 1,04 | 41% |
+
+(Tỷ lệ mua mỗi ngày là phần danh mục phải mua mới, tính theo giá trị.)
+
+### 16.3 Nhạy cảm với chi phí (alpha năm so với chuẩn)
+
+| Hệ số phí | `daily` dev | `daily` xác nhận | `sticky` dev | `sticky` xác nhận |
+|---|---|---|---|---|
+| 0 (chưa phí) | +46,3% [+35,3; +58,0] | +61,4% [+37,9; +85,6] | +40,0% [+28,4; +52,2] | +50,5% [+22,5; +79,2] |
+| 0,5 | +14,3% [+3,5; +25,8] | +29,8% [+6,8; +53,3] | +20,0% [+8,5; +32,0] | +29,8% [+2,4; +58,0] |
+| 1,0 (phí thực tế) | −17,8% [−28,5; −6,5] | −1,9% [−24,5; +20,9] | 0,0% [−11,5; +11,9] | +9,1% [−17,9; +37,0] |
+| 2,0 | −81,8% | −65,2% | −40,0% | −32,2% |
+
+### 16.4 So với chọn mã ngẫu nhiên và mua và nắm giữ
+
+- **Chọn ngẫu nhiên (200 danh mục, `daily`):** khi chưa tính phí, alpha ngẫu nhiên trung bình −0,6% (độ lệch chuẩn 5,0%) ở dev và −0,3% (9,2%) ở xác nhận. Không danh mục ngẫu nhiên nào đạt alpha của mô hình (+46,3% và +61,4%): tỷ lệ bằng 0 trên 200 lần. Đây là bằng chứng tín hiệu thật, chưa phải bằng chứng lợi nhuận. Với phí thực tế danh mục ngẫu nhiên lỗ nặng (alpha trung bình −80% mỗi năm) vì đảo danh mục mỗi ngày, nên so sánh có phí nên dựa vào chuẩn thị trường (mục 16.2), không dựa vào dòng này.
+- **Mua và nắm giữ (tổng lợi suất cả giai đoạn):**
+
+| Tài sản | Dev (1.260 phiên) | Xác nhận (378 phiên) |
+|---|---|---|
+| TCB | +157%, sụt giảm tối đa −64% | +18,9% |
+| CTG | +148%, −52% | +5,0% |
+| VNM | −10,5%, −42% | +10,2% |
+| ACB | +209%, −42% | +15,7% |
+| 19 mã tỷ trọng bằng nhau | +167%, −40% | +14,9% |
+
+Danh mục `sticky` có phí thực tế cho tổng lợi suất +187% ở dev (+32% ở xác nhận) so với chuẩn +173% (+17%).
+
+### 16.5 Nhận xét
+
+1. **Tín hiệu xếp hạng thật nhưng nhỏ so với chi phí.** Trước phí, alpha +46% đến +61% mỗi năm, khoảng tin cậy xa 0 ở cả dev và xác nhận. Danh mục giữ lại khoảng 64% giá trị mua mới mỗi ngày với `daily`, nên phí thực tế (0,4% mỗi vòng mua bán) ăn hết lợi thế.
+2. **Với phí thực tế không có alpha ròng khác 0 có ý nghĩa.** `daily` âm ở dev (−17,8%, khoảng tin cậy không chứa 0) và gần 0 ở xác nhận; `sticky` bằng 0,0% ở dev và +9,1% ở xác nhận với khoảng tin cậy rộng chứa 0. Khoảng tin cậy ở xác nhận rộng vì chỉ có 378 phiên.
+3. **Giảm vòng quay giúp nhưng chưa đủ để kết luận có lãi.** `sticky` cắt lượng mua từ 64% xuống 40% mỗi ngày và nâng alpha ròng khoảng 18 điểm phần trăm ở dev. Điểm hòa vốn nằm quanh hệ số phí 1,0 (alpha dev 0,0%), nên kết quả nhạy với mức phí thực tế của từng nhà môi giới.
+4. **Rủi ro không thấp hơn chuẩn.** Beta 1,04 đến 1,11 và sụt giảm tối đa −35% đến −38% (chuẩn −35% ở dev, −22% ở xác nhận). Lợi suất ròng của `sticky` gần chuẩn nhưng không rủi ro thấp hơn.
+5. **Phải nêu khi đưa vào báo cáo.** Giá vào ra là giá đóng cửa; quy tắc T+2 của thị trường Việt Nam (cổ phiếu mua hôm nay chưa bán được ngay hôm sau) chưa được mô hình hóa, nên chiến lược `daily` không thực hiện được nguyên trạng; tập mã là 19 mã còn niêm yết và có dữ liệu đẹp nên có thiên lệch sống sót; chuẩn so sánh không tính phí cân bằng lại; xác nhận chỉ là kiểm tra ngoài mẫu một lần cho các cấu hình đã in ra, không phải thử nghiệm một lần đúng nghĩa (mục 14.1); mức phí là giả định của nhóm. Do đó kết luận đúng là: mô hình có khả năng xếp hạng mã tốt hơn ngẫu nhiên, còn lợi nhuận giao dịch sau phí chưa được chứng minh.
+
+Hai file trung gian lớn (`results/research/pooled_abs_full/oof.csv.gz`, `data/extra/panel_1D.csv.gz`) đã bị xóa sau khi chạy xong, sinh lại bằng các lệnh ở đầu mục.
+
+## 17. Giới hạn của kết quả (B11)
+
+Mục này gom các giới hạn đã nêu rải rác ở mục 9, 11 đến 16 thành một chỗ để đưa vào báo cáo. Mỗi ý chỉ dựa trên số liệu có trong repo; ý nào chưa kiểm tra được thì ghi rõ là chưa kiểm tra.
+
+### 17.1 Tín hiệu yếu, nhiễu lớn
+
+- Mô hình tốt nhất (mục 14.8) chỉ đạt Accuracy 0,41 đến 0,42 so với 0,364 của lớp đa số, F1 macro 0,38 so với 0,330 của dự đoán ngẫu nhiên, ROC-AUC 0,58 so với 0,50. Chênh lệch giữa bốn mô hình nhỏ hơn độ lệch chuẩn giữa các fold (khoảng 0,03).
+- Mô hình riêng từng mã gần như không hơn ngẫu nhiên: AUC phân biệt tăng với giảm chỉ 0,52 đến 0,54 (mục 9, 12, 14.8). Chỉ khi gộp mã mới có tín hiệu xếp hạng (IC khoảng 0,10), và tín hiệu đó chủ yếu là đảo chiều ngắn hạn (đặc trưng `ret_3` có IC −0,050), không phải một quy luật tổng quát về xu hướng (mục 14.2).
+- Tín hiệu suy giảm nhanh theo chân trời: IC từ 0,122 (1 ngày) xuống 0,047 (20 ngày), và ở 10 đến 20 ngày không còn tín hiệu trong giai đoạn xác nhận (mục 14.7). Điều này phù hợp với thị trường gần hiệu quả: phần dự đoán được là nhỏ và biến mất khi giữ lâu hơn.
+- Hệ quả: nhãn ba lớp với ngưỡng 0,5% có tỷ lệ các lớp gần nhau (khoảng 35% giảm, 30% ngang, 36% tăng), nên Accuracy trên 0,33 không đủ để kết luận mô hình có giá trị; luôn đặt cạnh lớp đa số và dự đoán ngẫu nhiên.
+
+### 17.2 Quá khớp và chọn cấu hình trên cùng dữ liệu
+
+- **Quá khớp rõ ràng khi chưa giới hạn độ phức tạp.** Với siêu tham số mặc định, Random Forest và XGBoost đạt F1 macro 1,000 trên tập train nhưng chỉ 0,347 và 0,342 trên tập test (mục 9.1). Sau khi giới hạn độ sâu và số mẫu ở lá, và nhất là sau khi gộp mã, khoảng cách này nhỏ hơn nhiều, nhưng chưa đo lại bằng đúng bảng train so với test cho mô hình cuối.
+- **Thêm dữ liệu huấn luyện không cải thiện kết quả ở mô hình từng mã** (mục 9.4: F1 trên test không tăng khi tập train lớn lên). Cho thấy giới hạn nằm ở lượng thông tin trong đặc trưng chứ không ở số mẫu. Chưa kiểm tra lại điều này cho mô hình gộp.
+- **Chọn lựa nhiều lần.** Qua các mục 10 đến 15, nhóm đã thử 16 cấu hình gộp và từng mã (nhãn tuyệt đối và tương đối, ba nhóm đặc trưng, chân trời từ 1 đến 20 ngày, mô hình hai giai đoạn, MLP) cùng các biến thể tinh chỉnh, 1H và nhiều mã. Việc chọn chỉ dựa trên dev, nhưng bảng xác nhận (từ 2025) đã được in ra cho mọi cấu hình, nên xác nhận là kiểm tra ngoài mẫu chứ không phải thử nghiệm một lần đúng nghĩa. Không hiệu chỉnh cho số lần thử, nên các khoảng tin cậy trong mục 16 có xu hướng lạc quan.
+- Siêu tham số của mô hình gộp cố định từ đầu (không tinh chỉnh), nên nếu có thiên lệch thì không đến từ chọn siêu tham số, nhưng tinh chỉnh có thể cải thiện thêm; chưa làm.
+
+### 17.3 Thay đổi chế độ thị trường
+
+- F1 theo năm dao động và không có xu hướng cải thiện (mục 9.5); ở mô hình từng mã có năm mô hình thấp hơn ngẫu nhiên (XGBoost 2026, Logistic 2020, 2022 đến 2024 và 2026).
+- Giai đoạn xác nhận (từ 2025) chỉ có 6 fold. Tín hiệu chân trời 10 và 20 ngày có ở dev nhưng mất ở xác nhận; alpha ròng chân trời 3 đến 5 ngày cũng không lặp lại (mục 14.7). Nên không giả định tín hiệu đảo chiều ngắn hạn bền vững qua các chế độ thị trường khác.
+- Giai đoạn mẫu 2017 đến 2026 nhìn chung là tăng giá: danh mục 19 mã tỷ trọng bằng nhau tăng khoảng 173% trong 5 năm dev (22,8% mỗi năm, mục 16.2), ACB và TCB tăng 209% và 157%. Mọi chiến lược mua nhiều có beta trên 1 (1,04 đến 1,11) hưởng lợi từ xu hướng này. Phần alpha được tính để tách riêng ảnh hưởng đó, nhưng kết quả vẫn chưa được thử trong một thị trường đi xuống kéo dài (mẫu chỉ có VNM đi xuống ở dev).
+
+### 17.4 Chi phí và cách khớp lệnh
+
+- **Phí quyết định kết luận.** Trước phí alpha +46% đến +61% mỗi năm, với phí giả định 0,15% mua và 0,25% bán thì chọn lại mỗi ngày âm, giữ vị thế hòa vốn quanh 0 (mục 16.3). Mức phí thực tế của từng nhà môi giới không có trong dữ liệu, nên chỉ có thể báo cáo độ nhạy, không khẳng định có lãi hay lỗ.
+- **T+2 chưa được mô hình hóa.** Cổ phiếu vừa mua chưa bán được ngay hôm sau, nên chiến lược chọn lại mỗi ngày không thực hiện được nguyên trạng; chỉ nên đọc kết quả 1 ngày như chất lượng tín hiệu (mục 14.7).
+- **Khớp tại giá đóng cửa.** Chiến lược mua ở đúng giá đóng cửa của phiên đã có tín hiệu. Vào ở giá mở cửa hôm sau giữ khoảng 80% đến 90% alpha trước phí (mục 14.6) nhưng sau phí còn âm hơn.
+- **Không tính trượt giá, thanh khoản, ảnh hưởng giá của lệnh.** Mỗi lần mua mới 64% danh mục mỗi ngày (mục 16.2) là khối lượng lớn đối với cổ phiếu có thanh khoản thấp hơn nhóm đang dùng. Chuẩn so sánh (19 mã tỷ trọng bằng nhau, cân bằng lại hằng ngày) không tính phí; mua và nắm giữ thực tế gần như không tốn phí cân bằng lại.
+
+### 17.5 Mẫu dữ liệu và thiên lệch sống sót
+
+- **Chọn mã có điều kiện.** 19 mã gồm 4 mã của đề bài và 15 mã được chọn trong 35 ứng viên thanh khoản cao, theo chất lượng dữ liệu và yêu cầu đủ khoảng 10 năm lịch sử (mục 12.1). Các mã niêm yết sau hoặc đã hủy niêm yết không có mặt, nên có thiên lệch sống sót; chưa đo được ảnh hưởng của nó lên hiệu ứng đảo chiều.
+- **Các mã tương quan mạnh với nhau** (cùng thị trường, cùng ngành ngân hàng), nên số quan sát độc lập ít hơn 45.554 dòng. Chỉ số t của IC tính theo ngày chưa hiệu chỉnh tự tương quan; khoảng tin cậy bootstrap theo khối (khối 10 ngày) đáng tin hơn nhưng vẫn bỏ qua phụ thuộc dài hơn.
+- **Nguồn dữ liệu.** API DNSE (Entrade) cho nến ngày từ khoảng 2016 đến 2018 tùy mã và khung 1H chỉ khoảng 2 năm; giá được giả định đã điều chỉnh chia tách và cổ tức (không thấy bước nhảy vượt biên độ sàn, nhưng chưa đối chiếu với nguồn thứ hai). Một số nến lỗi (ngày trùng, OHLC sai) đã sửa ở bước làm sạch (`data-preprocess.md` mục 2).
+- **Khung 1H** chỉ có 2 năm và phần lớn điểm F1 cao đến từ hiệu ứng giờ trong ngày (baseline `hour_prior` F1 0,393 so với Logistic 0,416, mục 13.3), nên không dùng làm kết luận chính.
+
+### 17.6 Điều có thể và không nên nói trong báo cáo
+
+Có thể nói, vì có số liệu hỗ trợ:
+- Mô hình gộp 19 mã xếp hạng mã tốt hơn ngẫu nhiên và hơn mô hình từng mã về IC và AUC tăng/giảm, kể cả ở giai đoạn xác nhận (IC 0,10, AUC tăng/giảm 0,59 trên 19 mã; trên riêng bốn mã gốc AUC 0,592 so với 0,559). F1 macro trên bốn mã gốc thì không tăng ở dev (mục 14.4).
+- Trước phí, danh mục chọn theo mô hình có alpha dương rõ so với chuẩn và so với 200 danh mục ngẫu nhiên.
+- Mô hình học cây không giới hạn quá khớp nặng trên dữ liệu ít tín hiệu, và việc giới hạn độ phức tạp cùng gộp mã giảm điều đó.
+
+Không nên nói:
+- "Mô hình có lãi" hoặc "thắng thị trường": alpha ròng sau phí chưa khác 0 có ý nghĩa (mục 16).
+- "`ensemble3` tốt hơn rõ rệt các mô hình đơn": chênh lệch nhỏ hơn độ lệch chuẩn giữa các fold.
+- "Giá cổ phiếu dự đoán được": chỉ có tín hiệu xếp hạng yếu, chủ yếu đảo chiều ngắn hạn, mất dần theo chân trời.
+- Số liệu của lần chạy tốt nhất: luôn nêu kèm số cấu hình đã thử (mục 17.2).
+
+### 17.7 Hướng phát triển
+
+Theo thứ tự đáng làm, chưa làm cái nào:
+1. Mô hình hóa T+2 và giá vào ở giá mở cửa hôm sau, giữ vị thế tối thiểu 2 đến 3 phiên, rồi đo lại alpha ròng.
+2. Chạy thử không đặt lệnh (paper trading) để có phép kiểm tra ngoài mẫu thật sự, không dùng dữ liệu đã nhìn.
+3. Tinh chỉnh siêu tham số của mô hình gộp trong từng fold; thử cửa sổ huấn luyện trượt cố định để xem dữ liệu cũ có làm yếu tín hiệu không.
+4. Thêm mã (cả mã đã hủy niêm yết nếu có dữ liệu) để giảm thiên lệch sống sót; thử trên thị trường quốc tế như một kiểm tra khác chế độ.
+5. Chỉ giao dịch khi điểm vượt ngưỡng, và lưu mô hình để dự đoán hằng ngày (hiện chỉ có backtest, chưa có mô hình lưu sẵn).
+
+## 18. Khung 1H cho bốn mã gốc (B12)
+
+Chạy `train_models.py` ở khung 1H cho TCB, CTG, VNM, ACB, đúng như mô tả của B12. Khung phút (1, 5, 15, 30) không chạy vì chỉ có 63 phiên (mục 7). Đây là thí nghiệm mở rộng, không đưa vào kết luận chính (mô hình chính là khung ngày, mục 15.3).
+
+### 18.1 Thiết lập
+
+- Dữ liệu `data/processed/1H/` (cùng 30 đặc trưng: 25 giá, khối lượng và 5 thời gian; ngưỡng nhãn θ = 0,2%; 2.446 đến 2.447 mẫu mỗi mã từ 2024-11-04 đến 2026-10-23), mô hình riêng từng mã, walk-forward train đầu 1.000 nến, test 125 nến, gap 1: **11 fold mỗi mã**, test ghép liền từ 2025-08-25 đến 2026-10-05 (1.375 nến, khoảng 275 phiên mỗi mã). Siêu tham số mặc định như mục 3.
+- Lệnh: `python scripts/train_models.py --resolution 1H` (kết quả `results/1H/`) và `python scripts/hourly_ablation.py --processed-root data/processed --output-root results --symbols TCB CTG VNM ACB` (`results/1H/ablation_*.csv`, `hourly_profile.csv`). Mất khoảng 40 giây mỗi lệnh.
+- Sửa Sharpe: `backtest()` trong `train_models.py` và `tune_models.py` nay nhận `periods_per_year`, tính bằng 252 nhân số nến mỗi phiên của dữ liệu (1 với khung ngày, khoảng 5 với 1H). Kết quả khung ngày không đổi về công thức (hệ số vẫn 252); `results/extra/1H/backtest.csv` đã tính lại.
+
+### 18.2 Kết quả
+
+Trung bình qua 11 fold (`results/1H/summary.csv`):
+
+| Mã | F1 ngẫu nhiên | F1 Logistic | F1 Random Forest | F1 XGBoost | AUC Logistic | AUC Random Forest | AUC XGBoost |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| TCB | 0,329 | 0,402 | 0,406 | 0,391 | 0,591 | 0,579 | 0,565 |
+| CTG | 0,328 | 0,423 | 0,415 | 0,387 | 0,612 | 0,587 | 0,565 |
+| VNM | 0,324 | 0,399 | 0,365 | 0,405 | 0,616 | 0,591 | 0,580 |
+| ACB | 0,328 | 0,382 | 0,384 | 0,370 | 0,587 | 0,567 | 0,559 |
+| **Trung bình 4 mã** | 0,327 | **0,401** | 0,392 | 0,388 | **0,601** | 0,581 | 0,567 |
+
+Accuracy trung bình: Logistic 0,429, Random Forest 0,420, XGBoost 0,405, lớp đa số 0,371 (F1 macro 0,179). Quá khớp (F1 train so với test): Random Forest và XGBoost 1,000 so với 0,39; Logistic 0,457 so với 0,401. Con số F1 0,40 và AUC 0,60 khớp với số đã nêu ở mục 13.2 cho bốn mã gốc.
+
+### 18.3 Tín hiệu đến từ đâu (bốn mã gốc)
+
+Cùng phép so sánh như mục 13.3 (`ablation_summary.csv`, `ablation_differences.csv`):
+
+| Biến thể | F1 macro | ROC-AUC | AUC tăng/giảm |
+|---|---:|---:|---:|
+| `hour_prior` (chỉ tần suất lớp theo giờ) | 0,376 | 0,596 | 0,570 |
+| Logistic, 25 đặc trưng giá | 0,331 | 0,547 | 0,550 |
+| Logistic, chỉ 5 đặc trưng thời gian | 0,382 | 0,595 | 0,571 |
+| Logistic, giá và thời gian | 0,401 | 0,601 | 0,578 |
+| Random Forest, giá và thời gian | 0,392 | 0,581 | 0,567 |
+
+Chênh lệch (khoảng tin cậy 95%): Logistic giá và thời gian hơn `hour_prior` +0,026 F1 [+0,012; +0,040] nhưng AUC chỉ +0,005 [−0,003; +0,014] (chứa 0); Random Forest hơn +0,017 F1 [−0,004; +0,037] và thấp hơn 0,015 AUC [−0,029; −0,001]; Logistic chỉ giá **thấp hơn** `hour_prior` 0,045 F1 và 0,049 AUC.
+
+Lợi suất nến kế tiếp theo giờ (`hourly_profile.csv`): giờ 9 −0,066%, 10 −0,056%, 11 +0,047%, 13 +0,022%, 14 +0,095%; tỷ lệ lớp "ngang" 57% ở nến 10 giờ và 27% ở nến 14 giờ. Mọi giá trị nhỏ hơn 1/4 chi phí một vòng mua bán (0,40%).
+
+### 18.4 Backtest (long-only, phí 0,15% mua và 0,25% bán, tổng lợi suất cả giai đoạn test)
+
+| Mã | Mua và nắm giữ | Logistic | Random Forest | XGBoost | Ngẫu nhiên | Số lệnh mua (3 mô hình) |
+|---|---:|---:|---:|---:|---:|---:|
+| TCB | −12,9% | −47,5% | −29,9% | −49,0% | −61,2% | 184 đến 207 |
+| CTG | −12,0% | −49,9% | −44,9% | −60,0% | −62,4% | 215 đến 228 |
+| VNM | +4,4% | −20,4% | −33,4% | −26,6% | −47,7% | 129 đến 156 |
+| ACB | −8,5% | −44,1% | −31,7% | −36,7% | −58,4% | 162 đến 195 |
+
+`majority` (đứng ngoài thị trường) cho 0% và là chiến lược duy nhất hơn mua và nắm giữ ở TCB, CTG, ACB.
+
+### 18.5 Nhận xét
+
+1. **Kết quả lặp lại các mã mới (mục 13):** F1 Logistic 0,40 và AUC 0,60 cao hơn nhiều so với khung ngày của cùng bốn mã (AUC 0,52 đến 0,54, mục 5), nhưng phần lớn nhờ giờ trong ngày: 5 đặc trưng thời gian riêng lẻ đã cho AUC 0,595 và `hour_prior` 0,596. Đóng góp của chỉ báo giá trên nền đó nhỏ (AUC +0,005, khoảng tin cậy chứa 0).
+2. **Đặc trưng giá khung 1H không dự đoán được hướng:** Logistic chỉ giá có AUC 0,547, gần khung ngày.
+3. **Backtest lỗ nặng ở cả ba mô hình và cả bốn mã**, nặng hơn mua và nắm giữ, với 129 đến 228 lệnh mua trong khoảng 275 phiên: phí 0,4% mỗi vòng và hiệu ứng theo giờ nhỏ hơn 1/4 phí. Giữ nguyên kết luận mục 13.6: không đưa 1H vào kết luận chính, và nếu nêu F1 0,40 phải kèm baseline `hour_prior`.
+4. **Hạn chế:** chỉ khoảng hai năm dữ liệu, 11 fold, mỗi khối test khoảng 25 phiên, và mô hình riêng từng mã (không gộp mã như mô hình chính). Gộp mã ở khung 1H chưa thử.
+
+## 19. Mô hình triển khai (gói mô hình đã lưu)
+
+Gói `models/ensemble3_pooled_1D/` là mô hình chính (gộp 19 mã + `ensemble3`, khung ngày, 53 đặc trưng `full`, nhãn tuyệt đối ba lớp) huấn luyện **một lần trên toàn bộ dữ liệu có nhãn** (45.554 dòng, 2017-02-22 đến 2026-11-04), dùng để chạy dự đoán ở máy khác mà không phải huấn luyện lại. Lệnh: `python scripts/train_final_model.py` (thêm `--no-gpu` nếu không có GPU; mất khoảng 5 giây).
+
+| File | Nội dung | Kích thước |
+|---|---|---|
+| `logistic.joblib` | Pipeline scaler và Logistic (`C = 0,1`) | dưới 0,01 MB |
+| `random_forest.joblib` | 300 cây, `min_samples_leaf = 50` | 10,0 MB |
+| `xgboost.json` | 300 cây, `max_depth = 4`, `learning_rate = 0,05` | 1,8 MB |
+| `metadata.json` | danh sách 53 đặc trưng theo thứ tự, thứ tự lớp, ngưỡng nhãn, 19 mã, khoảng thời gian huấn luyện, phiên bản thư viện, commit | nhỏ |
+
+Cách dùng: `load_bundle(thư_mục)` và `ensemble_probabilities(bundle, bảng_đặc_trưng)` trong `train_final_model.py` trả về `p_down`, `p_flat`, `p_up` (trung bình xác suất của ba mô hình) và `score = p_up - p_down`.
+
+Đã kiểm tra:
+- Nạp lại gói cho xác suất khớp bản trong bộ nhớ (chênh lớn nhất 2e-8 trên 500 dòng; sai khác nhỏ do XGBoost huấn luyện trên GPU và dự đoán trên CPU).
+- Tiến trình riêng, **không có GPU** (`CUDA_VISIBLE_DEVICES=""`), nạp gói và dự đoán 15 mã của một ngày mất 0,7 giây, bộ nhớ đỉnh khoảng 260 MB (đo bằng `/usr/bin/time -v`, bao gồm nạp thư viện). Tổng thể nhẹ hơn nhiều so với ước tính 1 GB khi huấn luyện.
+- Tổng thư mục 12 MB.
+
+Lưu ý:
+- **Gói không có đánh giá riêng.** Hiệu năng kỳ vọng là kết quả walk-forward ở mục 14.8 và 16, không phải số đo trên chính dữ liệu đã huấn luyện. Không dùng gói này để chạy lại backtest lịch sử (mô hình đã thấy dữ liệu đó).
+- **Phiên bản thư viện phải khớp** với `metadata.json` (Python 3.14.4, scikit-learn 1.9.1, xgboost 3.4.1, numpy 2.5.4, pandas 3.1.1), vì file `joblib` phụ thuộc phiên bản. `requirements.txt` hiện ghim phiên bản cũ hơn và chưa khớp.
+- **Ngày dữ liệu của mã.** Dữ liệu bốn mã gốc (TCB, CTG, VNM, ACB) trong `data/cleaned/` dừng ở 2026-10-23, còn 15 mã bổ sung đến 2026-11-05, nên ngày cuối của panel (2026-11-04) chỉ có 15 mã. Khi chạy thật phải crawl lại đủ 19 mã.
+- Khâu dự đoán hằng ngày: `scripts/predict_daily.py` (mục 20).
+- Cần huấn luyện lại định kỳ (backtest dùng chu kỳ 63 phiên).
+
+## 20. Dự đoán hằng ngày (paper trading)
+
+`scripts/predict_daily.py` nạp gói mô hình (mục 19), chấm điểm nến ngày mới nhất của 19 mã và cập nhật nhật ký. Không huấn luyện, không cần GPU.
+
+```bash
+.venv/bin/python scripts/predict_daily.py --crawl
+```
+
+Chạy sau 15:05 giờ Việt Nam (nến ngày đóng lúc 15:00; bước làm sạch bỏ nến của hôm nay nếu chạy trước giờ đó). Tham số: `--crawl` lấy lại khoảng 420 ngày lịch (khoảng 290 nến) của 19 mã từ DNSE vào `data/live/raw/1D/` (thư mục này không commit); không có `--crawl` thì đọc file đã có; `--days N` chấm điểm N ngày gần nhất (dùng để lấp nhật ký); `--model-dir`, `--output-dir`, `--buffer` (mặc định 2,0 như backtest).
+
+**Đầu vào:** nến ngày thô `time, open, high, low, close, volume` của 19 mã trong `metadata.json` (cần đủ cả 19 mã vì đặc trưng thị trường và hạng chéo mã tính từ tất cả các mã cùng ngày). Qua cùng bước làm sạch như huấn luyện (`clean_data.py`), rồi dựng đặc trưng bằng `panel_data.featurize` (cùng mã với panel huấn luyện, `build_panel` giữ nguyên kết quả sau khi tách hàm: so sánh bằng nhau trên 45.554 dòng). Không cần VN-Index.
+
+**Đầu ra** (`results/live/`):
+- `predictions_log.csv`: nhật ký nối thêm mỗi ngày, một dòng cho mỗi (ngày, mã): `p_down`, `p_flat`, `p_up`, `score = p_up - p_down`, `rank` (1 là điểm cao nhất), `n_symbols`, `model_trained_until`, `scored_at`. Chạy lại cùng ngày thì ghi đè các dòng của ngày đó (không trùng).
+- `latest_signals.csv` (và in ra màn hình): các mã của ngày mới nhất kèm `daily_top` (nhóm 20% điểm cao nhất, tối thiểu 3 mã, tức 4 mã trong 19) và `sticky_hold`, `sticky_action` (`buy`, `sell`, `hold` so với hôm trước) theo cách giữ vị thế của backtest. Vị thế `sticky` được tính lại từ toàn bộ nhật ký nên phụ thuộc ngày bắt đầu ghi.
+
+**Số nến cần thiết.** Đo bằng cách tính đặc trưng từ lịch sử bị cắt ngắn rồi so với đặc trưng dựng từ toàn bộ lịch sử, trên 591 dòng của 45 ngày gần nhất:
+
+| Số nến mỗi mã | Chênh lệch điểm lớn nhất | Tỷ lệ giữ nguyên thứ hạng |
+|---|---:|---:|
+| 400 | 2e-13 | 100% |
+| 270 | 4e-9 | 100% |
+| 150 | 3e-3 | 99,7% |
+| 120 | 2e-3 | 98,3% |
+| 100 | 8e-3 | 94,6% (mất 76 trong 591 dòng) |
+
+Chỉ báo dạng EMA phụ thuộc cả lịch sử nên chuỗi ngắn làm lệch nhẹ. Khuyến nghị **từ 250 nến**; script cảnh báo khi một mã ít hơn 250 nến đã đóng. (Con số 120 đến 150 nêu ở phần thảo luận trước chỉ là mức tối thiểu.)
+
+**Cảnh báo script đưa ra:** phiên bản scikit-learn, xgboost, numpy, pandas khác lúc lưu mô hình; mô hình huấn luyện cách ngày chấm hơn 100 ngày (cần huấn luyện lại bằng `train_final_model.py`); thiếu mã ở ngày chấm; nến mới nhất cũ hơn 4 ngày.
+
+**Đã chạy thử:** `--crawl --days 3` ngày 2026-11-06 lúc 15:27: thu 19 mã, mỗi mã 287 nến, chấm 3 ngày (57 dòng nhật ký, không trùng), mất khoảng 1 giây không kể thời gian crawl. Chạy lại không tạo dòng trùng. Nhật ký thử đã xóa để việc ghi thật bắt đầu từ ngày bạn chọn.
+
+**Lưu ý khi đọc nhật ký:**
+- Chỉ các dòng có `time` sau `model_trained_until` mới là ngoài mẫu; các dòng không sau ngày đó nằm trong dữ liệu huấn luyện, không dùng để đánh giá.
+- Điểm là tín hiệu xếp hạng từ giá đóng cửa của `time`. Vào lệnh thực tế ở phiên kế tiếp (giá mở cửa hoặc sau đó), T+2 chưa được mô hình hóa, và kết quả backtest cho thấy alpha ròng sau phí chưa khác 0 có ý nghĩa (mục 16). Không dùng làm khuyến nghị giao dịch.
+- Ngày lễ: không có nến mới nên script chấm lại ngày cuối và ghi đè, không gây lỗi.
+- Chưa có script đối chiếu nhật ký với lợi suất thực tế (cần thêm khi đủ số ngày).
+
+Lịch chạy tự động (ví dụ cron, múi giờ Việt Nam): `5 15 * * 1-5 cd <repo> && .venv/bin/python scripts/predict_daily.py --crawl`.

@@ -145,9 +145,7 @@ def add_labels(panel: pd.DataFrame) -> pd.DataFrame:
     return panel[enough]
 
 
-def build_panel(
-    universe: dict[str, pd.DataFrame], index: pd.DataFrame, max_date: pd.Timestamp | None = None
-) -> pd.DataFrame:
+def featurize(universe: dict[str, pd.DataFrame], max_date: pd.Timestamp | None = None) -> pd.DataFrame:
     frames = []
     for symbol, data in universe.items():
         if max_date is not None:
@@ -155,10 +153,15 @@ def build_panel(
         featured = own_features(data).iloc[WARMUP:]
         featured.insert(1, "symbol", symbol)
         frames.append(featured)
-    panel = pd.concat(frames, ignore_index=True)
+    return add_market_features(pd.concat(frames, ignore_index=True))
+
+
+def build_panel(
+    universe: dict[str, pd.DataFrame], index: pd.DataFrame, max_date: pd.Timestamp | None = None
+) -> pd.DataFrame:
     if max_date is not None:
         index = index[index["time"] <= max_date]
-    panel = add_index_features(add_market_features(panel), index)
+    panel = add_index_features(featurize(universe, max_date), index)
     panel = panel.dropna(subset=list(FEATURE_SETS["full_idx"]))
     panel = panel.replace([np.inf, -np.inf], np.nan).dropna(subset=list(FEATURE_SETS["full_idx"]))
     labeled = panel.dropna(subset=["r_next"]).copy()

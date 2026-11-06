@@ -28,7 +28,7 @@ from preprocess_data import (
     feature_columns_for,
     walk_forward_splits,
 )
-from train_models import CLASSES, RANDOM_STATE, backtest, score_fold
+from train_models import CLASSES, RANDOM_STATE, TRADING_DAYS, backtest, score_fold
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -156,7 +156,7 @@ def run_symbol(symbol: str, resolution: str, processed_root: Path):
     predictions = pd.concat(prediction_frames, ignore_index=True)
     backtest_rows = [
         {"symbol": symbol, "variant": variant, "model": name,
-         **backtest(frame["y_pred"].to_numpy(), frame["r_next"].to_numpy())}
+         **backtest(frame["y_pred"].to_numpy(), frame["r_next"].to_numpy(), TRADING_DAYS)}
         for (variant, name), frame in predictions.groupby(["variant", "model"])
     ]
     return pd.DataFrame(fold_rows), predictions, pd.DataFrame(backtest_rows), pd.DataFrame(param_rows)

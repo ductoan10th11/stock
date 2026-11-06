@@ -273,11 +273,12 @@ def top_k_portfolio(frame: pd.DataFrame, buffer: float = 1.0) -> pd.DataFrame:
         selected = rank.le(holdings, axis=0) & scores.notna()
     weights = selected.div(selected.sum(axis=1), axis=0).fillna(0.0)
     change = weights.diff().fillna(weights)
-    cost = BUY_FEE * change.clip(lower=0).sum(axis=1) + SELL_FEE * (-change).clip(lower=0).sum(axis=1)
+    buy_turnover, sell_turnover = change.clip(lower=0).sum(axis=1), (-change).clip(lower=0).sum(axis=1)
+    cost = BUY_FEE * buy_turnover + SELL_FEE * sell_turnover
     gross = (weights * returns.fillna(0.0)).sum(axis=1)
     return pd.DataFrame(
         {"gross": gross, "net": gross - cost, "benchmark": returns.mean(axis=1),
-         "buy_turnover": change.clip(lower=0).sum(axis=1)}
+         "buy_turnover": buy_turnover, "sell_turnover": sell_turnover}
     )
 
 

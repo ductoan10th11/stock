@@ -11,7 +11,7 @@ Trạng thái: **xong**, **một phần**, **chưa làm**. Cập nhật cột n�
 | 1. Nghiên cứu chuỗi giá, chỉ báo kỹ thuật, phát biểu bài toán phân loại | B1 | Xong (Chương 1, 2 của báo cáo) |
 | 2. Thu thập dữ liệu, tính chỉ báo làm đặc trưng | B2 đến B5 | Xong |
 | 3. Huấn luyện Logistic Regression, Random Forest, XGBoost bằng walk-forward; so sánh với mua và nắm giữ, dự đoán ngẫu nhiên | B6, B8, B9 | Mô hình ban đầu, tinh chỉnh và chọn mô hình cuối xong |
-| 4. Đánh giá bằng Accuracy, F1, ROC-AUC và backtest; thảo luận giới hạn dự đoán giá và quá khớp | B6, B7, B10, B11 | Chỉ số, backtest và phân tích quá khớp xong; thảo luận chưa làm |
+| 4. Đánh giá bằng Accuracy, F1, ROC-AUC và backtest; thảo luận giới hạn dự đoán giá và quá khớp | B6, B7, B10, B11 | Chỉ số, backtest cuối, phân tích quá khớp và thảo luận giới hạn xong (tài liệu); chưa đưa vào báo cáo LaTeX |
 
 ## Điểm khác so với đề bài
 
@@ -92,20 +92,25 @@ Chọn dựa trên đánh đổi giữa F1, độ ổn định giữa các fold,
 
 ### B10. Backtest và so sánh với baseline (nhiệm vụ 3, 4)
 
-Chạy lại backtest cho cấu hình cuối. Có thể thêm phân tích nhạy cảm với chi phí giao dịch, hoặc chỉ giao dịch khi xác suất dự đoán vượt ngưỡng, để giảm số lần giao dịch.
+Chạy lại backtest cho cấu hình cuối (gộp 19 mã + `ensemble3`), so với chuẩn thị trường, mua và nắm giữ từng mã và chọn mã ngẫu nhiên, kèm nhạy cảm với phí, sụt giảm tối đa và cách giữ vị thế để giảm vòng quay.
+- Chạy: `python scripts/panel_data.py`, `python scripts/panel_experiments.py --name pooled_abs_full --mode pooled --label abs --features full`, `python scripts/final_backtest.py`.
+- Đầu ra: `results/research/final_backtest/`; số liệu và nhận xét ở [train.md](train.md), mục 16.
 - Báo cáo: mục 3.6 và 3.10.
-- Trạng thái: một phần (backtest của mô hình ban đầu đã có).
+- Trạng thái: xong. Tín hiệu xếp hạng thật (không danh mục ngẫu nhiên nào đạt alpha của mô hình trước phí), nhưng với phí thực tế alpha ròng chưa khác 0 có ý nghĩa (`sticky` 0,0% ở dev, +9,1% ở xác nhận, khoảng tin cậy chứa 0). Chưa mô hình hóa T+2. Chưa thử cách chỉ giao dịch khi xác suất vượt ngưỡng; `sticky` là cách giảm vòng quay đã thử.
 
 ### B11. Thảo luận giới hạn (nhiệm vụ 4)
 
 Giới hạn của việc dự đoán giá cổ phiếu (thị trường gần hiệu quả, nhiễu lớn, thay đổi chế độ), nguy cơ quá khớp, chi phí giao dịch, thiên lệch sống sót và giai đoạn tăng giá của mẫu. Nên viết sau khi có kết quả B7 đến B10.
+- Đầu ra: [train.md](train.md), mục 17 (tín hiệu yếu, quá khớp và chọn cấu hình nhiều lần, thay đổi chế độ, chi phí và khớp lệnh, thiên lệch mẫu, điều nên và không nên nói, hướng phát triển).
 - Báo cáo: mục 3.11, phần Kết luận và hướng phát triển.
-- Trạng thái: chưa làm.
+- Trạng thái: xong phần tài liệu, chưa đưa vào báo cáo LaTeX.
 
 ### B12. Thí nghiệm mở rộng khung nến (tùy chọn)
 
 Chạy `python scripts/train_models.py --resolution 1H` hoặc khung phút. Khung phút chỉ có 63 phiên nên chỉ đáng làm với 1H. Chỉ làm nếu còn thời gian, và không đưa vào kết luận chính.
-- Trạng thái: chưa làm.
+- Chạy: `python scripts/train_models.py --resolution 1H`, `python scripts/hourly_ablation.py --processed-root data/processed --output-root results --symbols TCB CTG VNM ACB`.
+- Đầu ra: `results/1H/`; số liệu và nhận xét ở [train.md](train.md), mục 18 (bốn mã gốc) và mục 13 (15 mã mới).
+- Trạng thái: xong cho khung 1H, không làm khung phút (chỉ 63 phiên). F1 Logistic 0,40 và AUC 0,60 phần lớn nhờ giờ trong ngày (baseline `hour_prior` F1 0,376, AUC 0,596); backtest lỗ nặng hơn mua và nắm giữ ở cả bốn mã. Không đưa vào kết luận chính. Sharpe khung giờ đã sửa thang.
 
 ### B13. Hoàn thiện báo cáo
 
@@ -121,7 +126,15 @@ Chạy `python scripts/train_models.py --resolution 1H` hoặc khung phút. Khun
 Thử các hướng gộp mã, nhãn tương đối so với thị trường, mô hình biến động hai giai đoạn, ensemble, VN-Index và chân trời 3 đến 20 ngày trên panel 19 mã, so sánh trên các fold đến hết 2024 và xác nhận trên các fold từ 2025.
 - Chạy: `python scripts/panel_data.py --verify`, `python scripts/panel_experiments.py --name <tên> --mode pooled --label rel --features full`, `python scripts/summarize_research.py`.
 - Đầu ra: `results/research/`; số liệu và nhận xét ở [train.md](train.md), mục 14.
-- Trạng thái: xong phần thử nghiệm. Hướng tốt nhất: mô hình gộp nhiều mã, đặc trưng đầy đủ không kèm VN-Index (nhãn tuyệt đối và tương đối gần tương đương sau khi xác nhận). Tín hiệu xếp hạng được xác nhận ngoài mẫu, nhưng alpha ròng sau phí chưa khác 0 có ý nghĩa. Đã chọn `ensemble3` gộp 19 mã, khung ngày làm mô hình chính ([train.md](train.md), mục 15). Chưa đưa vào báo cáo; quyết định này khác "mỗi mã một mô hình riêng" trong `AGENTS.md` và `data-preprocess.md` nên cần nhóm đồng ý trước khi sửa các tài liệu đó.
+- Trạng thái: xong phần thử nghiệm. Hướng tốt nhất: mô hình gộp nhiều mã, đặc trưng đầy đủ không kèm VN-Index (nhãn tuyệt đối và tương đối gần tương đương sau khi xác nhận). Tín hiệu xếp hạng được xác nhận ngoài mẫu, nhưng alpha ròng sau phí chưa khác 0 có ý nghĩa. Mô hình chính đã chốt (nhóm đồng ý): gộp 19 mã để huấn luyện một mô hình chung (pooled), kết hợp ba mô hình bằng `ensemble3`, khung ngày ([train.md](train.md), mục 15). Hai khái niệm độc lập: gộp mã là cách chia dữ liệu, `ensemble3` là cách kết hợp mô hình. `AGENTS.md` và `data-preprocess.md` đã sửa theo. Chưa đưa vào báo cáo LaTeX.
+
+### B15. Mô hình triển khai (đã lưu)
+
+Huấn luyện mô hình chính trên toàn bộ dữ liệu và lưu thành gói để chạy ở máy khác (không có GPU), dùng cho paper trading. Gói không dùng để backtest lại lịch sử.
+- Chạy: `python scripts/train_final_model.py`.
+- Đầu ra: `models/ensemble3_pooled_1D/` (3 file mô hình và `metadata.json`, 12 MB); chi tiết ở [train.md](train.md), mục 19.
+- Dự đoán hằng ngày: `python scripts/predict_daily.py --crawl` (đầu ra `results/live/`, chi tiết ở [train.md](train.md), mục 20).
+- Trạng thái: gói mô hình và script dự đoán xong, đã chạy thử với dữ liệu thật ngày 2026-11-06 và kiểm tra tính nhất quán đặc trưng (cần từ 250 nến mỗi mã). Chưa cố định phiên bản trong `requirements.txt`, chưa có script đối chiếu nhật ký với lợi suất thực tế.
 
 ## Quyết định cần chốt
 

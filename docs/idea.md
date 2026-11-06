@@ -99,9 +99,8 @@ flowchart TD
     classDef done fill:#dcfce7,stroke:#16a34a,color:#111827
     classDef part fill:#ffedd5,stroke:#ea580c,color:#111827
     classDef todo fill:#f3f4f6,stroke:#9ca3af,stroke-dasharray:4 3,color:#111827
-    class B1,B2,B3,B4,B5,B6,B7 done
-    class B10 part
-    class B8,B9,B11,B12,B13 todo
+    class B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12 done
+    class B13 todo
 ```
 
 ## 3. Bên trong `train_models.py`

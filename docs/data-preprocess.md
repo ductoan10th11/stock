@@ -6,11 +6,14 @@ Tài liệu mô tả cách biến dữ liệu nến thô thành bộ đặc trư
 
 | Hạng mục | Lựa chọn |
 |---|---|
-| Mã cổ phiếu | TCB, CTG, VNM, ACB |
+| Mã cổ phiếu | 4 mã của đề bài (TCB, CTG, VNM, ACB) và 15 mã bổ sung, tổng 19 mã |
 | Khung nến | 1D là khung chính; 1, 5, 15, 30 phút và 1H là các thí nghiệm mở rộng |
 | Nhãn | 3 lớp: `-1` giảm, `0` ngang, `1` tăng |
-| Cách huấn luyện | Mô hình riêng cho từng mã |
+| Cách huấn luyện | Mô hình chung huấn luyện trên dữ liệu gộp 19 mã (pooled). Mô hình riêng cho từng mã (per-symbol) giữ làm baseline |
+| Kết hợp mô hình | `ensemble3`: trung bình xác suất của Logistic, Random Forest, XGBoost (không liên quan đến số mã) |
 | Kiểm định | Walk-forward, cửa sổ mở rộng |
+
+Các mục 1 đến 4 mô tả tiền xử lý từng mã (đặc trưng cơ bản, nhãn), áp dụng cho cả hai cách huấn luyện. Mục 5 mô tả walk-forward từng mã; mục 5b mô tả walk-forward theo ngày cho mô hình gộp. Đặc trưng thị trường, hạng chéo mã và panel gộp do `scripts/panel_data.py` dựng (xem [train.md](train.md), mục 14.1).
 
 ---
 
@@ -194,6 +197,21 @@ fold 3: [============ train 876 ============][test 63]
 Ước tính số fold: TCB khoảng 20, ba mã còn lại khoảng 27.
 
 **Tinh chỉnh siêu tham số:** trong mỗi fold, lấy 20% cuối của tập train (theo thời gian) làm validation. Chọn siêu tham số trên phần này, sau đó huấn luyện lại trên toàn bộ tập train của fold rồi mới dự đoán khối test. Tập test không bao giờ được dùng để chọn bất cứ thứ gì.
+
+## 5b. Walk-forward cho mô hình gộp 19 mã
+
+Dữ liệu 19 mã được gộp thành một bảng (panel), chia **theo ngày** chứ không theo từng mã: mọi mã cùng ngày thuộc cùng một fold.
+
+| Tham số | Giá trị |
+|---|---|
+| Train ban đầu | 750 ngày giao dịch |
+| Khối test | 63 ngày, liền nhau, không chồng lấn |
+| Khoảng cách (purge) | 1 ngày (bằng chân trời dự đoán) |
+| Số fold | 26 (20 fold dev có khối test bắt đầu trước 2025-01-01, 6 fold xác nhận từ 2025-01-01) |
+
+Quy tắc chống rò rỉ giữ nguyên: mọi thứ học từ dữ liệu chỉ fit trên các ngày thuộc tập train của fold. Thêm hai điểm riêng của mô hình gộp:
+- Đặc trưng thị trường (lợi suất trung bình, độ phân tán, tỷ lệ mã tăng) và hạng chéo mã chỉ dùng giá cùng ngày `t` của các mã, nên không nhìn trước tương lai. `panel_data.py --verify` kiểm tra bằng cách dựng lại panel với dữ liệu bị cắt.
+- Chọn hướng và siêu tham số chỉ dựa trên các fold dev; các fold xác nhận dùng để kiểm tra lại.
 
 ## 6. Chuẩn hoá
 

@@ -62,7 +62,7 @@ def score_fold(y_true: np.ndarray, y_pred: np.ndarray, proba: np.ndarray | None)
     }
 
 
-def backtest(y_pred: np.ndarray, r_next: np.ndarray) -> dict:
+def backtest(y_pred: np.ndarray, r_next: np.ndarray, periods_per_year: float) -> dict:
     position = (
         pd.Series(np.where(y_pred == UP, 1.0, np.where(y_pred == DOWN, 0.0, np.nan)))
         .ffill()
@@ -74,10 +74,10 @@ def backtest(y_pred: np.ndarray, r_next: np.ndarray) -> dict:
     sells = change == -1
     log_return = position * r_next - buys * BUY_COST - sells * SELL_COST
     log_return[-1] -= position[-1] * SELL_COST
-    daily_std = log_return.std(ddof=1)
+    period_std = log_return.std(ddof=1)
     return {
         "total_return": np.expm1(log_return.sum()),
-        "sharpe": log_return.mean() / daily_std * np.sqrt(TRADING_DAYS) if daily_std > 0 else np.nan,
+        "sharpe": log_return.mean() / period_std * np.sqrt(periods_per_year) if period_std > 0 else np.nan,
         "trades": int(buys.sum()),
     }
 
@@ -88,6 +88,7 @@ def evaluate_symbol(symbol: str, resolution: str, processed_root: Path):
     y = data["label"].to_numpy() + 1
     r_next = data["r_next"].to_numpy()
     times = data["time"].to_numpy()
+    periods_per_year = TRADING_DAYS * len(data) / data["time"].str[:10].nunique()
 
     feature_names = feature_columns_for(resolution)
     fold_rows, prediction_frames, importance_rows = [], [], []
@@ -140,11 +141,11 @@ def evaluate_symbol(symbol: str, resolution: str, processed_root: Path):
     test_all = np.concatenate(test_blocks)
     random_all = np.concatenate(random_draws, axis=1)
     backtests = {
-        name: backtest(frame["y_pred"].to_numpy(), frame["r_next"].to_numpy())
+        name: backtest(frame["y_pred"].to_numpy(), frame["r_next"].to_numpy(), periods_per_year)
         for name, frame in pd.concat(prediction_frames).groupby("model")
     }
-    backtests["buy_and_hold"] = backtest(np.full(len(test_all), UP), r_next[test_all])
-    random_results = pd.DataFrame([backtest(draw, r_next[test_all]) for draw in random_all])
+    backtests["buy_and_hold"] = backtest(np.full(len(test_all), UP), r_next[test_all], periods_per_year)
+    random_results = pd.DataFrame([backtest(draw, r_next[test_all], periods_per_year) for draw in random_all])
     backtests["random"] = random_results.mean().to_dict()
     backtest_rows = [{"symbol": symbol, "model": name, **values} for name, values in backtests.items()]
     return (

@@ -4,14 +4,20 @@ Hướng dẫn cho AI agent và thành viên làm việc trong repo này.
 
 ## Tổng quan
 
-Bài tiểu luận học phần Học máy (nhóm 16): dự đoán xu hướng tăng/giảm giá cổ phiếu TCB, CTG, VNM, ACB từ nến ngày. Phân loại 3 lớp (`-1` giảm, `0` ngang, `1` tăng), mỗi mã một mô hình riêng, kiểm định walk-forward, so sánh với mua và nắm giữ, dự đoán ngẫu nhiên.
+Bài tiểu luận học phần Học máy (nhóm 16): dự đoán xu hướng tăng/giảm giá cổ phiếu từ nến ngày. Phân loại 3 lớp (`-1` giảm, `0` ngang, `1` tăng), kiểm định walk-forward, so sánh với mua và nắm giữ, dự đoán ngẫu nhiên.
+
+Mô hình chính (nhóm đã chốt): **một mô hình chung huấn luyện trên dữ liệu gộp 19 mã** (4 mã của đề bài TCB, CTG, VNM, ACB và 15 mã bổ sung), khung ngày, kết hợp ba mô hình Logistic, Random Forest, XGBoost bằng cách lấy trung bình xác suất (`ensemble3`). Hai khái niệm này độc lập, không dùng lẫn:
+- **Gộp mã (pooled):** cách chia dữ liệu huấn luyện, một mô hình cho nhiều mã, thay cho "mỗi mã một mô hình" (per-symbol).
+- **`ensemble3`:** cách kết hợp mô hình, không liên quan đến số mã.
+
+Chạy từng mã riêng (`scripts/train_models.py`) vẫn giữ làm baseline để so sánh. Báo cáo kết quả riêng cho 4 mã của đề bài như một tập con của mô hình gộp. Số liệu và lý do chọn nằm ở [docs/train.md](docs/train.md), mục 14 và 15.
 
 Đọc trước khi làm việc: [docs/idea.md](docs/idea.md) (đề bài), [docs/data-preprocess.md](docs/data-preprocess.md) (thiết kế tiền xử lý, nhãn, đặc trưng, walk-forward, checklist chống rò rỉ), `docs/project-report/Tiêu trí chấm các bài kiểm tra và bài thi/Tiêu chí chấm.txt` (tiêu chí chấm).
 
 ## Cấu trúc repo
 
 ```
-scripts/                  crawl.py (thu thập), clean_data.py, preprocess_data.py, filter_data.py, train_models.py, analyze_results.py, tune_models.py, select_final_model.py, screen_symbols.py, hourly_ablation.py, panel_data.py, panel_experiments.py, summarize_research.py
+scripts/                  crawl.py (thu thập), clean_data.py, preprocess_data.py, filter_data.py, train_models.py, analyze_results.py, tune_models.py, select_final_model.py, screen_symbols.py, hourly_ablation.py, panel_data.py, panel_experiments.py, summarize_research.py, final_backtest.py, train_final_model.py, predict_daily.py
 scripts/crawl.py         thu thập nến từ API DNSE (Entrade), ghi vào data/raw/<khung>/<mã>.csv
 data/raw/<khung>/        dữ liệu thô, các cột time, open, high, low, close, volume
 data/processed/1D/       dữ liệu đã tiền xử lý (đặc trưng, r_next, label)
@@ -19,6 +25,8 @@ results/<khung>/         kết quả walk-forward: fold_metrics, predictions, ba
 data/extra/            dữ liệu thí nghiệm mở rộng: 15 mã bổ sung (cleaned, processed) và panel_1D.csv.gz (sinh lại bằng panel_data.py)
 data/screening/        chấm điểm chất lượng dữ liệu các mã ứng viên (screen_symbols.py)
 results/extra/         kết quả thí nghiệm mở rộng (15 mã, khung 1D và 1H)
+models/                  gói mô hình đã huấn luyện để triển khai (train_final_model.py): file mô hình và metadata.json
+results/live/          nhật ký dự đoán hằng ngày và tín hiệu mới nhất (predict_daily.py); dữ liệu nến tải về nằm ở data/live/ (không commit)
 results/research/      kết quả mô hình gộp nhiều mã: metrics.csv từng cấu hình, summary.csv (panel_experiments.py)
 notebooks/               EDA và thực nghiệm
 docs/                    tài liệu thiết kế
