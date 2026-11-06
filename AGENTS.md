@@ -28,6 +28,8 @@ results/extra/         kết quả thí nghiệm mở rộng (15 mã, khung 1D v
 models/                  gói mô hình đã huấn luyện để triển khai (train_final_model.py): file mô hình và metadata.json
 results/live/          nhật ký dự đoán hằng ngày và tín hiệu mới nhất (predict_daily.py); dữ liệu nến tải về nằm ở data/live/ (không commit)
 results/research/      kết quả mô hình gộp nhiều mã: metrics.csv từng cấu hình, summary.csv (panel_experiments.py)
+Makefile                 lệnh tắt: `make help` (setup, web, test, daily; target huấn luyện cần ALLOW_TRAIN=1, chạy trên máy GPU)
+webapp/                  web Streamlit hai trang (backtest, paper trading): `.venv/bin/streamlit run webapp/app.py`; `market.py` dữ liệu và alpha, `engine.py` mô phỏng danh mục, `paper.py` tài khoản giả lập (trạng thái ở results/live/paper/account.json), `test_engine.py` kiểm tra
 notebooks/               EDA và thực nghiệm
 docs/                    tài liệu thiết kế
 docs/project-report/

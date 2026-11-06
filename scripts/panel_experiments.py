@@ -287,7 +287,9 @@ def alpha_beta(strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: fl
     return alpha * periods_per_year, beta
 
 
-def bootstrap_alpha_ci(strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: float) -> tuple[float, float]:
+def bootstrap_alpha_ci(
+    strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: float, level: float = 0.95
+) -> tuple[float, float]:
     n = len(strategy)
     rng = np.random.default_rng(RANDOM_STATE)
     blocks = int(np.ceil(n / BOOTSTRAP_BLOCK))
@@ -298,7 +300,7 @@ def bootstrap_alpha_ci(strategy: np.ndarray, benchmark: np.ndarray, periods_per_
         (x - x.mean(axis=1, keepdims=True)) ** 2
     ).sum(axis=1)
     alpha = (y.mean(axis=1) - beta * x.mean(axis=1)) * periods_per_year
-    low, high = np.percentile(alpha, [2.5, 97.5])
+    low, high = np.percentile(alpha, [50 * (1 - level), 50 * (1 + level)])
     return float(low), float(high)
 
 

@@ -136,6 +136,16 @@ Huấn luyện mô hình chính trên toàn bộ dữ liệu và lưu thành gó
 - Dự đoán hằng ngày: `python scripts/predict_daily.py --crawl` (đầu ra `results/live/`, chi tiết ở [train.md](train.md), mục 20).
 - Trạng thái: gói mô hình và script dự đoán xong, đã chạy thử với dữ liệu thật ngày 2026-11-06 và kiểm tra tính nhất quán đặc trưng (cần từ 250 nến mỗi mã). Chưa cố định phiên bản trong `requirements.txt`, chưa có script đối chiếu nhật ký với lợi suất thực tế.
 
+### B16. Web backtest và paper trading
+
+Web Streamlit hai trang trong `webapp/`. Chạy bằng `make` (xem `make help`): `make setup`, `make web`, `make daily`, `make test`.
+- Backtest dùng tín hiệu ngoài mẫu `results/research/pooled_abs_full/oof.csv.gz` (không dùng gói `models/` vì đã học cả giai đoạn này). File này sinh bằng `make oof ALLOW_TRAIN=1`, chỉ chạy trên máy GPU; các target huấn luyện từ chối chạy nếu thiếu `ALLOW_TRAIN=1`.
+- Trang Backtest: tín hiệu mô hình `ensemble3` và bảy alpha cổ điển (động lượng 12-1 tháng, động lượng 60 phiên, đảo chiều 5 phiên, biến động thấp, đảo chiều RSI, gần đỉnh 60 phiên, Alpha#6), tổ hợp z-score tùy chỉnh. Danh mục top-K, vùng đệm giữ vị thế, ngưỡng điểm. Kiểu "thực tế": khớp ở giá mở cửa phiên sau, khoá T+2 (số phiên giữ tối thiểu), trượt giá, mã kịch trần không mua được và kịch sàn không bán được (biên 7%, bước giá HOSE), trọng số mỗi mã chặn ở 10% giá trị giao dịch trung bình 20 phiên so với vốn. Kiểu "lý thuyết" giống `final_backtest.py`. So với trung bình đều 19 mã, VN-Index và chọn ngẫu nhiên. Khoảng tin cậy alpha có thêm bản Bonferroni cho 9 chiến thuật.
+- Trang Paper trading: một tài khoản giả lập (`results/live/paper/account.json`); nút cập nhật tải nến (19 mã và VN-Index), chấm điểm bằng gói mô hình, xử lý các phiên mới. Cùng các ràng buộc như backtest thực tế, lô 100. Chỉ dùng tín hiệu của các phiên sau `trained_until`.
+- Môi trường: Python 3.12 trở lên, phiên bản trong `requirements.txt` khớp `metadata.json` của gói mô hình. Chưa mô hình hóa lô 100 và hàng đợi khớp lệnh trong backtest.
+- Kết quả: kiểu thực tế, mô hình `ensemble3` có alpha năm khoảng −26%, khoảng tin cậy không chứa 0.
+- Trạng thái: xong. Kiểm tra: `make test`.
+
 ## Quyết định cần chốt
 
 - **Tập kiểm tra giữ lại:** mẫu báo cáo hỏi "tập kiểm tra giữ lại", còn walk-forward không có một tập riêng. Đề xuất: coi các khối test của walk-forward là tập kiểm tra, và tinh chỉnh siêu tham số trong từng fold trên 20% cuối của train (đúng [data-preprocess.md](data-preprocess.md), mục 5). Cần nêu rõ trong báo cáo.
