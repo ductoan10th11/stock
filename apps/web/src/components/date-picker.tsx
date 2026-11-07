@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { formatDate } from "@/lib/format"
+import { cn } from "@/lib/utils"
 
-type Props = { label: string; value: string | undefined; min: string | undefined; max: string | undefined; onChange: (iso: string) => void }
+type Props = { className?: string; label: string; value: string | undefined; min: string | undefined; max: string | undefined; onChange: (iso: string) => void }
 
 const toDate = (iso: string) => {
   const [year, month, day] = iso.split("-").map(Number)
@@ -14,12 +15,12 @@ const toDate = (iso: string) => {
 }
 const toIso = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
 
-export function DatePicker({ label, value, min, max, onChange }: Props) {
+export function DatePicker({ className, label, value, min, max, onChange }: Props) {
   const selected = value ? toDate(value) : undefined
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" aria-label={label} disabled={!value} className="w-32 justify-start font-normal tabular-nums">
+        <Button variant="outline" size="sm" aria-label={label} disabled={!value} className={cn("w-32 justify-start font-normal tabular-nums", className)}>
           <CalendarIcon />
           {value ? formatDate(value) : "..."}
         </Button>

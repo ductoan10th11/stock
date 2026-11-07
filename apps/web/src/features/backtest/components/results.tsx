@@ -44,7 +44,7 @@ function ChartCard({ title, help, action, children }: { title: string; help: str
         <HelpTip>{help}</HelpTip>
         {action && <div className="ml-auto flex items-center gap-2">{action}</div>}
       </CardHeader>
-      <CardContent className="min-h-[220px] flex-1 lg:min-h-0">{children}</CardContent>
+      <CardContent className="h-[240px] lg:h-auto lg:min-h-0 lg:flex-1">{children}</CardContent>
     </Card>
   )
 }
@@ -102,7 +102,7 @@ function Loaded({ data, request, settled }: { data: BacktestResponse; request: B
           </CardContent>
         </Card>
       </TabsContent>
-      <TabsContent value="detail" className="grid min-h-0 content-start gap-3 md:overflow-y-auto">
+      <TabsContent value="detail" className="grid min-h-0 grid-cols-[minmax(0,1fr)] content-start gap-3 md:overflow-y-auto">
         <Card className="gap-3 py-4">
           <CardHeader>
             <CardTitle>Lợi suất theo năm</CardTitle>

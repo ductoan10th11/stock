@@ -12,7 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useMeta } from "@/features/meta/hooks"
 import { AccountOverview } from "@/features/paper/components/account-view"
 import { CreateAccountForm } from "@/features/paper/components/create-account-form"
-import { ManageTab } from "@/features/paper/components/manage-tab"
 import { Rules } from "@/features/paper/components/rules"
 import { OverviewSkeleton, TableSkeleton } from "@/features/paper/components/skeletons"
 import { TradesTable } from "@/features/paper/components/trades-table"
@@ -96,13 +95,6 @@ export function PaperPage() {
           </TabsContent>
           <TabsContent value="settings" className="min-h-0 space-y-3 md:overflow-y-auto">
             {trainedUntil && <Rules trainedUntil={trainedUntil} />}
-            {state?.account && (
-              <Card>
-                <CardContent>
-                  <ManageTab />
-                </CardContent>
-              </Card>
-            )}
           </TabsContent>
         </Tabs>
       )}

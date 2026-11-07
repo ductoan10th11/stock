@@ -63,7 +63,7 @@ export function TimeLineChart({ dates, series, formatValue, log = false, height 
             />
           }
         />
-        <ChartLegend content={<ChartLegendContent />} />
+        <ChartLegend content={<ChartLegendContent className="flex-wrap gap-x-3 gap-y-0.5 text-xs [&>div]:whitespace-nowrap" />} />
         {area && (
           <Area dataKey={series[0].key} type="monotone" stroke="none" fill={`url(#area-${series[0].key})`} isAnimationActive={false} connectNulls legendType="none" tooltipType="none" />
         )}

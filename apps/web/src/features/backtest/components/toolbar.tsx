@@ -56,7 +56,7 @@ export function Toolbar({ meta, form, onChange, busy, summary }: Props) {
   return (
     <Card className="shrink-0 gap-0 py-2" aria-busy={busy}>
       <CardContent className="flex flex-wrap items-center gap-2 px-3">
-      <div className="flex items-center gap-1.5">
+      <div className="flex min-w-0 items-center gap-1.5 max-sm:w-[calc(50%-0.25rem)]">
         <Select
           value={form.execution}
           onValueChange={(id) => {
@@ -64,7 +64,7 @@ export function Toolbar({ meta, form, onChange, busy, summary }: Props) {
             if (next) onChange({ ...form, ...presetDefaults(next) })
           }}
         >
-          <SelectTrigger aria-label="Cách khớp lệnh" className="w-36">
+          <SelectTrigger aria-label="Cách khớp lệnh" className="w-full sm:w-36">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -75,11 +75,15 @@ export function Toolbar({ meta, form, onChange, busy, summary }: Props) {
             ))}
           </SelectContent>
         </Select>
-        {preset && <HelpTip>{preset.description}</HelpTip>}
+        {preset && (
+          <span className="max-sm:hidden">
+            <HelpTip>{preset.description}</HelpTip>
+          </span>
+        )}
       </div>
-      <div className="flex items-center gap-1.5">
+      <div className="flex min-w-0 items-center gap-1.5 max-sm:w-[calc(50%-0.25rem)]">
         <Select value={form.period} onValueChange={(period) => onChange({ ...form, period: period as Period })}>
-          <SelectTrigger aria-label="Giai đoạn" className="w-52">
+          <SelectTrigger aria-label="Giai đoạn" className="w-full sm:w-52">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -90,10 +94,12 @@ export function Toolbar({ meta, form, onChange, busy, summary }: Props) {
             ))}
           </SelectContent>
         </Select>
-        <HelpTip>Xác nhận (từ 2025) là giai đoạn chưa dùng để chọn chiến thuật, đáng tin hơn.</HelpTip>
+        <span className="max-sm:hidden">
+          <HelpTip>Xác nhận (từ 2025) là giai đoạn chưa dùng để chọn chiến thuật, đáng tin hơn.</HelpTip>
+        </span>
       </div>
       <StrategyPicker meta={meta} form={form} onChange={onChange} />
-      {summary && <span className="ml-auto text-xs text-muted-foreground">{summary}</span>}
+      {summary && <span className="text-xs text-muted-foreground max-sm:order-last max-sm:w-full sm:ml-auto">{summary}</span>}
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" className={cn("h-9 gap-2 font-normal", !summary && "ml-auto")}>

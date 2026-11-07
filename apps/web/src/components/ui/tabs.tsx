@@ -52,7 +52,9 @@ function TabsList({
     if (!list || variant !== "default") return
     const measure = () => {
       const active = list.querySelector<HTMLElement>('[data-state="active"]')
-      if (active) setThumb({ left: active.offsetLeft, width: active.offsetWidth })
+      if (!active) return
+      setThumb({ left: active.offsetLeft, width: active.offsetWidth })
+      active.scrollIntoView({ block: "nearest", inline: "nearest" })
     }
     measure()
     const mutations = new MutationObserver(measure)
@@ -70,7 +72,7 @@ function TabsList({
       ref={ref}
       data-slot="tabs-list"
       data-variant={variant}
-      className={cn(tabsListVariants({ variant }), "relative", className)}
+      className={cn(tabsListVariants({ variant }), "relative max-w-full justify-start overflow-x-auto [scrollbar-width:none]", className)}
       {...props}
       onPointerDown={(event) => {
         props.onPointerDown?.(event)

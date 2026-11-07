@@ -96,14 +96,14 @@ export function ModelReview() {
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
-          <div className="flex items-center gap-1.5">
-            <Button size="icon" variant="outline" className="size-8" aria-label="Lùi một khoảng" disabled={!range || range.start <= range.first_date} onClick={() => shift(-1)}>
+          <div className="flex w-full items-center gap-1.5 sm:w-auto">
+            <Button size="icon" variant="outline" className="size-8 shrink-0" aria-label="Lùi một khoảng" disabled={!range || range.start <= range.first_date} onClick={() => shift(-1)}>
               <ChevronLeft />
             </Button>
-            <DatePicker label="Từ ngày" value={range?.start} min={range?.first_date} max={range?.end} onChange={(start) => setDates(start, range!.end)} />
+            <DatePicker className="w-auto min-w-0 flex-1 sm:w-32 sm:flex-none" label="Từ ngày" value={range?.start} min={range?.first_date} max={range?.end} onChange={(start) => setDates(start, range!.end)} />
             <span className="text-sm text-muted-foreground">đến</span>
-            <DatePicker label="Đến ngày" value={range?.end} min={range?.start} max={range?.last_date} onChange={(end) => setDates(range!.start, end)} />
-            <Button size="icon" variant="outline" className="size-8" aria-label="Tiến một khoảng" disabled={!range || range.end >= range.last_date} onClick={() => shift(1)}>
+            <DatePicker className="w-auto min-w-0 flex-1 sm:w-32 sm:flex-none" label="Đến ngày" value={range?.end} min={range?.start} max={range?.last_date} onChange={(end) => setDates(range!.start, end)} />
+            <Button size="icon" variant="outline" className="size-8 shrink-0" aria-label="Tiến một khoảng" disabled={!range || range.end >= range.last_date} onClick={() => shift(1)}>
               <ChevronRight />
             </Button>
           </div>
@@ -119,7 +119,7 @@ export function ModelReview() {
         </Alert>
       )}
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(0,1fr)]">
-        <Card className="order-2 min-h-0 gap-0 overflow-hidden py-0 lg:order-1">
+        <Card className="min-h-0 gap-0 overflow-hidden py-0">
           <CardHeader className="flex shrink-0 flex-row items-baseline justify-between gap-2 border-b py-3">
             <CardTitle>Theo mã</CardTitle>
             {range && range.total > 0 && (
@@ -128,7 +128,7 @@ export function ModelReview() {
               </span>
             )}
           </CardHeader>
-          <ScrollArea className="min-h-0 flex-1">
+          <ScrollArea className="h-64 lg:h-auto lg:min-h-0 lg:flex-1">
             {range ? (
               <Table>
                 <TableBody>
@@ -159,7 +159,7 @@ export function ModelReview() {
             )}
           </ScrollArea>
         </Card>
-        <div className="order-1 flex min-h-0 min-w-0 flex-col gap-3 lg:order-2">
+        <div className="flex min-h-0 min-w-0 flex-col gap-3">
           {detail.data && detail.data.candles.length > 0 ? (
             <Card className="min-h-0 gap-2 py-3 lg:flex-1">
               <CardHeader className="flex shrink-0 flex-row items-center gap-2">

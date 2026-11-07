@@ -41,25 +41,3 @@ export function useCreateAccount() {
   })
 }
 
-const withoutAccount = (state: PaperState): PaperState => ({
-  ...state, account: null, summary: null, equity: null, orders: [], positions: [], ranking: [], trades: [], score_ready: false, signal_date: null,
-})
-
-export function useDeleteAccount() {
-  const client = useQueryClient()
-  return useMutation({
-    mutationFn: () => api<void>("/paper", { method: "DELETE" }),
-    onMutate: async () => {
-      await client.cancelQueries({ queryKey: paperQuery.queryKey })
-      const previous = client.getQueryData<PaperState>(paperQuery.queryKey)
-      if (previous) client.setQueryData(paperQuery.queryKey, withoutAccount(previous))
-      return { previous }
-    },
-    onError: (error, _variables, context) => {
-      if (context?.previous) client.setQueryData(paperQuery.queryKey, context.previous)
-      toast.error(paperErrorMessage(error))
-    },
-    onSuccess: () => toast.success("Đã xoá tài khoản giả lập."),
-    onSettled: () => refreshDerived(client),
-  })
-}

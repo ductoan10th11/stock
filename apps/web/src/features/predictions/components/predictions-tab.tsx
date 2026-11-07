@@ -72,16 +72,16 @@ export function PredictionsTab({ state }: { state: PaperState | undefined }) {
         </Alert>
       )}
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
-        <Card className="order-2 min-h-0 gap-0 overflow-hidden py-0 lg:order-1">
+        <Card className="min-h-0 gap-0 overflow-hidden py-0">
           <CardHeader className="flex shrink-0 flex-row items-baseline justify-between gap-2 border-b py-3">
             <CardTitle>Dự đoán</CardTitle>
             <span className="text-xs text-muted-foreground">{latest.data ? `phiên tới · ${formatDate(latest.data.date)}` : "..."}</span>
           </CardHeader>
-          <ScrollArea className="min-h-0 flex-1">
+          <ScrollArea className="h-64 lg:h-auto lg:min-h-0 lg:flex-1">
             {latest.data ? <SymbolList rows={latest.data.rows} selected={symbol} onSelect={select} onHover={prefetch} plan={plan} /> : <ListSkeleton />}
           </ScrollArea>
         </Card>
-        <div className="order-1 flex min-h-0 min-w-0 flex-col gap-3 lg:order-2">
+        <div className="flex min-h-0 min-w-0 flex-col gap-3">
           {detail.data && latest.data ? (
             <>
               <NextSessionCard data={detail.data} row={row} plan={plan[detail.data.symbol]} total={latest.data.rows.length} />

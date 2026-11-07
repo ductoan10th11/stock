@@ -32,7 +32,7 @@ function Workspace({ meta }: { meta: Meta }) {
   const summary = data ? `${formatDate(data.start)} đến ${formatDate(data.end)} · ${data.sessions} phiên` : undefined
   return (
     <Tabs
-      className="min-h-0 flex-1"
+      className="min-h-0 min-w-0 flex-1"
       value={tab}
       onValueChange={(next) => setParams((current) => new URLSearchParams({ ...Object.fromEntries(current), tab: next }), { replace: true })}
     >
