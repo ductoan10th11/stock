@@ -1,0 +1,17 @@
+.git
+.venv
+.venv.old
+.vscode
+__pycache__
+*.pyc
+data
+models
+results
+notebooks
+docs
+nginx
+apps/web
+secrets
+**/.env
+**/.pytest_cache
+**/__pycache__

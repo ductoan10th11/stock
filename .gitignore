@@ -5,3 +5,9 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 data/live/
+node_modules
+dist
+.streamlit
+secrets/
+.ipynb_checkpoints/
+.env

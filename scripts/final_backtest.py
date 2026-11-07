@@ -10,7 +10,7 @@ import pandas as pd
 
 from panel_experiments import (
     BUY_FEE, CONFIRM_START, MIN_HOLDINGS, RANDOM_STATE, SELL_FEE, STICKY_BUFFER, TRADING_DAYS,
-    alpha_beta, bootstrap_alpha_ci, top_k_portfolio,
+    alpha_beta, alpha_interval, bootstrap_alpha_ci, top_k_portfolio,
 )
 
 
@@ -30,9 +30,10 @@ def max_drawdown(daily: np.ndarray) -> float:
     return float((wealth / wealth.cummax() - 1.0).min())
 
 
-def summarize(daily: np.ndarray, benchmark: np.ndarray) -> dict:
+def summarize(daily: np.ndarray, benchmark: np.ndarray, samples: np.ndarray | None = None) -> dict:
+    """`samples` are bootstrap alpha draws when the caller already has them, to avoid resampling."""
     alpha, beta = alpha_beta(daily, benchmark, TRADING_DAYS)
-    low, high = bootstrap_alpha_ci(daily, benchmark, TRADING_DAYS)
+    low, high = bootstrap_alpha_ci(daily, benchmark, TRADING_DAYS) if samples is None else alpha_interval(samples)
     return {
         "return_ann": daily.mean() * TRADING_DAYS, "total_return": float(np.prod(1.0 + daily) - 1.0),
         "sharpe": daily.mean() / daily.std() * np.sqrt(TRADING_DAYS), "max_drawdown": max_drawdown(daily),

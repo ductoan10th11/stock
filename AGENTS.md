@@ -28,9 +28,12 @@ results/extra/         kết quả thí nghiệm mở rộng (15 mã, khung 1D v
 models/                  gói mô hình đã huấn luyện để triển khai (train_final_model.py): file mô hình và metadata.json
 results/live/          nhật ký dự đoán hằng ngày và tín hiệu mới nhất (predict_daily.py); dữ liệu nến tải về nằm ở data/live/ (không commit)
 results/research/      kết quả mô hình gộp nhiều mã: metrics.csv từng cấu hình, summary.csv (panel_experiments.py)
-Makefile                 lệnh tắt: `make help` (setup, web, test, daily; target huấn luyện cần ALLOW_TRAIN=1, chạy trên máy GPU)
-webapp/                  web Streamlit hai trang (backtest, paper trading): `.venv/bin/streamlit run webapp/app.py`; `market.py` dữ liệu và alpha, `engine.py` mô phỏng danh mục, `paper.py` tài khoản giả lập (trạng thái ở results/live/paper/account.json), `test_engine.py` kiểm tra
-notebooks/               EDA và thực nghiệm
+Makefile                 lệnh tắt: `make help` (setup, api, web, test, daily; target huấn luyện cần ALLOW_TRAIN=1, chạy trên máy GPU)
+apps/api/                backend FastAPI (`make api`, `/docs` xem API): `app/main.py` khởi tạo, `app/api/routes/` (meta, backtest, paper), `app/schemas/` (pydantic), `app/services/` (`market.py` dữ liệu và alpha, `engine.py` mô phỏng danh mục, `backtest.py`, `paper.py` và `paper_service.py` tài khoản giả lập, `live.py` dữ liệu trực tiếp, `scheduler.py` cập nhật hằng ngày, `predictions.py` dự đoán từng ngày cho biểu đồ nến, `account_store.py` lưu tài khoản vào SQLite, `reports.py` và `telegram.py` báo cáo lãi/lỗ qua Telegram, `catalog.py` danh mục chiến thuật), `app/db.py` schema SQLite và migration (thêm bảng mới = thêm một phần tử vào `MIGRATIONS`), `app/core/config.py` đường dẫn; `tests/` (pytest). Trạng thái paper trading ở data/live/paper.db (bảng account, position, trade, equity, daily_report; không commit, cần sao lưu)
+apps/web/                frontend React + Vite + TypeScript + Tailwind + shadcn/ui + lucide-react, font Roboto (`make web`, gọi API qua proxy `/api`): `src/app/` khung và router, `src/pages/`, `src/features/<backtest|paper|predictions|portfolio|meta>/` (types, hooks, components), `src/components/ui/` (shadcn), `src/lib/` (api-client, format)
+nginx/                   cấu hình nginx của máy chủ (`make nginx-enable` tạo symlink vào /etc/nginx/sites-enabled)
+compose.yaml             chỉ một container `api` (apps/api/Dockerfile, cổng 127.0.0.1:8000); web không chạy container: nginx của máy chủ phục vụ thẳng `apps/web/dist` và proxy `/api` sang `api`; `make up` (build web rồi chạy api), `make down`, `make logs`; data, results, models gắn từ máy chủ qua bind mount
+notebooks/               `eda.ipynb`, `models.ipynb`, `tuning.ipynb` (xem bảng ở docs/flow.md); `Dockerfile` cho container Jupyter (`make notebook-up`)
 docs/                    tài liệu thiết kế
 docs/project-report/
   bao-cao/               báo cáo LaTeX đang viết (bao_cao.tex, images/)

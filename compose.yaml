@@ -1,0 +1,80 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: stock-api
+    container_name: stock-api
+    restart: unless-stopped
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
+    mem_limit: 1g
+    memswap_limit: 1g
+    cpus: 2
+    pids_limit: 256
+    env_file:
+      - path: apps/api/.env
+        required: false
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./models:/app/models:ro
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  notebook:
+    profiles: ["notebook"]
+    build:
+      context: .
+      dockerfile: notebooks/Dockerfile
+    image: stock-notebook
+    container_name: stock-notebook
+    restart: unless-stopped
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 2g
+    memswap_limit: 2g
+    cpus: 2
+    pids_limit: 512
+    working_dir: /app/notebooks
+    ports:
+      - "127.0.0.1:${NOTEBOOK_PORT:-8888}:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./scripts:/app/scripts:ro
+      - ./data:/app/data:ro
+      - ./results:/app/results:ro
+      - ./models:/app/models:ro
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    secrets:
+      - jupyter_password_hash
+    command:
+      - sh
+      - -c
+      - >-
+        exec jupyter notebook --no-browser
+        --ServerApp.ip=0.0.0.0
+        --ServerApp.port=8888
+        --ServerApp.root_dir=/app/notebooks
+        --ServerApp.trust_xheaders=True
+        --ServerApp.identity_provider_class=jupyter_server.auth.identity.PasswordIdentityProvider
+        --PasswordIdentityProvider.password_required=True
+        --PasswordIdentityProvider.hashed_password="$$(cat /run/secrets/jupyter_password_hash)"
+
+secrets:
+  jupyter_password_hash:
+    file: ${JUPYTER_SECRET_FILE:-./secrets/jupyter_password_hash}

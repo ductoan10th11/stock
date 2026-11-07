@@ -49,6 +49,8 @@ flowchart TD
     results[("results/KHUNG/<br/>fold_metrics, predictions, backtest,<br/>feature_importance, summary")]
 
     eda["notebooks/eda.ipynb<br/>khảo sát dữ liệu"]
+    nbm["notebooks/models.ipynb<br/>3 thuật toán, baseline, walk-forward"]
+    nbt["notebooks/tuning.ipynb<br/>ablation, siêu tham số, Voting"]
     filt["scripts/filter_data.py<br/>nhánh thử nghiệm: chỉ ngân hàng, nhãn 2 lớp"]
     filtered[("data/filtered/")]
 
@@ -58,6 +60,8 @@ flowchart TD
     API --> crawl --> raw --> clean --> cleaned --> prep --> processed --> train --> results --> docs --> report
     results --> analyze --> report
     raw --> eda --> report
+    processed --> nbm --> report
+    processed --> nbt --> report
     raw --> filt --> filtered
     prep -. "import walk_forward_splits,<br/>feature_columns_for" .-> train
 
@@ -65,7 +69,7 @@ flowchart TD
     classDef data fill:#fef9c3,stroke:#ca8a04,color:#111827
     classDef out fill:#dcfce7,stroke:#16a34a,color:#111827
     classDef side fill:#f3f4f6,stroke:#9ca3af,stroke-dasharray:4 3,color:#111827
-    class crawl,clean,prep,train,analyze,eda code
+    class crawl,clean,prep,train,analyze,eda,nbm,nbt code
     class raw,cleaned,processed,results,filtered data
     class docs,report out
     class filt,API side

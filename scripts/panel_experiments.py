@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import time
 from concurrent.futures import ProcessPoolExecutor
-from functools import partial
+from functools import lru_cache, partial
 from pathlib import Path
 
 import numpy as np
@@ -287,21 +287,32 @@ def alpha_beta(strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: fl
     return alpha * periods_per_year, beta
 
 
-def bootstrap_alpha_ci(
-    strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: float, level: float = 0.95
-) -> tuple[float, float]:
-    n = len(strategy)
+@lru_cache(maxsize=8)
+def block_bootstrap_index(n: int) -> np.ndarray:
     rng = np.random.default_rng(RANDOM_STATE)
     blocks = int(np.ceil(n / BOOTSTRAP_BLOCK))
     starts = rng.integers(0, n - BOOTSTRAP_BLOCK + 1, (BOOTSTRAP_RUNS, blocks))
-    index = (starts[:, :, None] + np.arange(BOOTSTRAP_BLOCK)).reshape(BOOTSTRAP_RUNS, -1)[:, :n]
+    return (starts[:, :, None] + np.arange(BOOTSTRAP_BLOCK)).reshape(BOOTSTRAP_RUNS, -1)[:, :n]
+
+
+def bootstrap_alpha(strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: float) -> np.ndarray:
+    index = block_bootstrap_index(len(strategy))
     x, y = benchmark[index], strategy[index]
-    beta = ((x - x.mean(axis=1, keepdims=True)) * (y - y.mean(axis=1, keepdims=True))).sum(axis=1) / (
-        (x - x.mean(axis=1, keepdims=True)) ** 2
-    ).sum(axis=1)
-    alpha = (y.mean(axis=1) - beta * x.mean(axis=1)) * periods_per_year
-    low, high = np.percentile(alpha, [50 * (1 - level), 50 * (1 + level)])
+    x_mean, y_mean = x.mean(axis=1, keepdims=True), y.mean(axis=1, keepdims=True)
+    x_centered = x - x_mean
+    beta = (x_centered * (y - y_mean)).sum(axis=1) / (x_centered**2).sum(axis=1)
+    return (y_mean[:, 0] - beta * x_mean[:, 0]) * periods_per_year
+
+
+def alpha_interval(samples: np.ndarray, level: float = 0.95) -> tuple[float, float]:
+    low, high = np.percentile(samples, [50 * (1 - level), 50 * (1 + level)])
     return float(low), float(high)
+
+
+def bootstrap_alpha_ci(
+    strategy: np.ndarray, benchmark: np.ndarray, periods_per_year: float, level: float = 0.95
+) -> tuple[float, float]:
+    return alpha_interval(bootstrap_alpha(strategy, benchmark, periods_per_year), level)
 
 
 def fold_scores(frame: pd.DataFrame, rng: np.random.Generator) -> tuple[float, float, float]:
