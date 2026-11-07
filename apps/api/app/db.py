@@ -71,6 +71,16 @@ MIGRATIONS = [
     "ALTER TABLE account ADD COLUMN sizing TEXT NOT NULL DEFAULT 'equal';",
     "ALTER TABLE account ADD COLUMN sell_score REAL;",
     "ALTER TABLE account ADD COLUMN replay INTEGER NOT NULL DEFAULT 0;",
+    """
+    CREATE TABLE telegram_user (
+        chat_id INTEGER PRIMARY KEY,
+        username TEXT,
+        first_name TEXT,
+        status TEXT NOT NULL CHECK (status IN ('pending', 'approved', 'rejected')),
+        requested_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        decided_at TEXT
+    ) WITHOUT ROWID;
+    """,
 ]
 
 

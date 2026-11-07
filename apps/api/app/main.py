@@ -10,6 +10,7 @@ from app.core.errors import PaperError
 from app.services.backtest import BacktestService
 from app.services.market import load_market
 from app.services.model_review import ModelReview
+from app.services import bot, telegram
 from app.services.scheduler import refresh_loop
 
 
@@ -18,10 +19,13 @@ async def lifespan(app: FastAPI):
     market = load_market()
     app.state.backtest = BacktestService(market)
     app.state.review = ModelReview(market)
-    refresher = asyncio.create_task(refresh_loop()) if os.environ.get("AUTO_REFRESH", "1") == "1" else None
+    background = os.environ.get("AUTO_REFRESH", "1") == "1"
+    tasks = [asyncio.create_task(refresh_loop())] if background else []
+    if background and telegram.configured():
+        tasks.append(asyncio.create_task(bot.poll_loop()))
     yield
-    if refresher:
-        refresher.cancel()
+    for task in tasks:
+        task.cancel()
 
 
 app = FastAPI(title="Stock ML API", lifespan=lifespan)

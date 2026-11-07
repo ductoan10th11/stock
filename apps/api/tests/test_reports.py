@@ -3,7 +3,7 @@ import pytest
 from app.schemas.common import PortfolioParams
 from app.schemas.paper import AccountInfo, EquityCurve, Order, PaperState, Position, Summary
 from app.db import connect
-from app.services import reports, telegram
+from app.services import reports, subscribers, telegram
 from app.services.account_store import save_account
 from app.services.paper import new_account
 from app.services.engine import Params
@@ -34,13 +34,28 @@ def sent(monkeypatch):
 
 
 def test_message_reports_profit_positions_and_plan():
-    text = reports.daily_message(make_state())
-    assert "Paper trading 09/11/2026" in text
-    assert "Tài khoản: 1,02 tỷ (+2,00%)" in text
-    assert "Hôm nay: +2,00%" in text
-    assert "Lãi/lỗ: +20,0 triệu" in text
-    assert "PVD +2,00%" in text
-    assert "Lệnh phiên tới: mua DPM; bán PVD" in text
+    assert reports.daily_message(make_state()).splitlines() == [
+        "Paper trading 09/11/2026",
+        "Mô hình: ensemble3",
+        "",
+        "Vốn: 1,000,000,000",
+        "Tài khoản: 1,020,000,000",
+        "Hôm nay: +2,00%",
+        "Lãi/lỗ: +20,000,000 (+2,00%)",
+        "Tiền mặt: 12%",
+        "",
+        "Đang giữ (1):",
+        "PVD +2,00%",
+        "",
+        "Lệnh phiên tới: mua DPM; bán PVD",
+    ]
+
+
+def test_money_is_exact_to_the_dong_and_losses_carry_a_minus():
+    assert reports.money(1_010_946_538.4) == "1,010,946,538"
+    state = make_state()
+    state.summary.gain, state.summary.gain_pct = -1_234_567.6, -0.0123
+    assert "Lãi/lỗ: -1,234,568 (-1,23%)" in reports.daily_message(state)
 
 
 def test_report_is_sent_once_per_session_and_stored(sent):
@@ -68,3 +83,20 @@ def test_nothing_is_sent_without_telegram_config_or_sessions(sent, monkeypatch):
     monkeypatch.setattr(reports, "read_state", lambda: make_state().model_copy(update={"summary": None}))
     assert reports.send_daily_report() is False
     assert sent == []
+
+
+def test_subscribers_get_the_report_and_a_failing_one_does_not_block_the_rest(sent, monkeypatch):
+    for chat_id in (7, 8, 9):
+        subscribers.set_status(chat_id, "approved")
+    subscribers.set_status(10, "rejected")
+    monkeypatch.setattr(telegram, "admin_id", lambda: 8)
+    delivered = []
+
+    def send_to(chat_id, text):
+        if chat_id == 7:
+            raise OSError("blocked the bot")
+        delivered.append(chat_id)
+
+    monkeypatch.setattr(telegram, "send_to", send_to)
+    assert reports.send_daily_report() is True
+    assert len(sent) == 1 and delivered == [9]
